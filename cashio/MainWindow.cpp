@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->widgetBar->setLayout(mBarLayout);
 
     switchPage(PageDatabase);
+    ui->widgetSearchBar->hide();
 }
 
 MainWindow::~MainWindow()
@@ -36,8 +37,10 @@ void MainWindow::switchPage(PageIndex pageIndex)
 
 void MainWindow::slotDbBarBtnSearchClicked()
 {
-    bool isHidden = ui->widgetSearchBar->isHidden();
-    ui->widgetSearchBar->setShown(isHidden);
+    bool shouldShow = ui->widgetSearchBar->isHidden();
+    ui->widgetSearchBar->setShown(shouldShow);
+    if (shouldShow)
+        ui->editSearch->setFocus();
 }
 
 void MainWindow::slotCbxPageIndexChanged(int index)
