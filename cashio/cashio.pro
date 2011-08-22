@@ -11,10 +11,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    ToolbarDb.cpp
+    WidgetDbBar.cpp \
+    WidgetGraphBar.cpp
 
 HEADERS  += MainWindow.h \
-    ToolbarDb.h
+    WidgetDbBar.h \
+    WidgetGraphBar.h
 
 FORMS    += MainWindow.ui \
-            ToolbarDb.ui
+    WidgetDbBar.ui \
+    WidgetGraphBar.ui

@@ -6,10 +6,42 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->layoutToolbar->addWidget(&mToolbarDb);
+    setupSlots();
+
+    mBarLayout = new QStackedLayout(ui->widgetBar);
+    mBarLayout->addWidget(&mDbBar);
+    mBarLayout->addWidget(&mGraphBar);
+    ui->widgetBar->setLayout(mBarLayout);
+
+    switchPage(PageDatabase);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setupSlots()
+{
+    connect(&mDbBar, SIGNAL(sigBtnSearchClicked()), this, SLOT(slotDbBarBtnSearchClicked()));
+    connect(ui->cbxPage, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCbxPageIndexChanged(int)));
+}
+
+void MainWindow::switchPage(PageIndex pageIndex)
+{
+    mBarLayout->setCurrentIndex(pageIndex);
+    if (pageIndex != PageDatabase)
+        ui->widgetSearchBar->setShown(false);
+}
+
+void MainWindow::slotDbBarBtnSearchClicked()
+{
+    bool isHidden = ui->widgetSearchBar->isHidden();
+    ui->widgetSearchBar->setShown(isHidden);
+}
+
+void MainWindow::slotCbxPageIndexChanged(int index)
+{
+    PageIndex pageIndex = (PageIndex)index;
+    switchPage(pageIndex);
 }

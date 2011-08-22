@@ -1,11 +1,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include "ToolbarDb.h"
+#include <QtCore>
+#include <QtGui>
+#include "WidgetDbBar.h"
+#include "WidgetGraphBar.h"
+
 namespace Ui {
     class MainWindow;
 }
+
+enum PageIndex {
+    PageDatabase = 0,
+    PageGraphics,
+};
 
 class MainWindow : public QMainWindow
 {
@@ -16,8 +24,20 @@ public:
     ~MainWindow();
 
 private:
+    void setupSlots();
+    void switchPage(PageIndex pageName);
+
+public slots:
+    void slotDbBarBtnSearchClicked();
+
+private slots:
+    void slotCbxPageIndexChanged(int index);
+
+private:
     Ui::MainWindow *ui;
-    ToolbarDb mToolbarDb;
+    QStackedLayout* mBarLayout;
+    WidgetDbBar mDbBar;
+    WidgetGraphBar mGraphBar;
 };
 
 #endif // MAINWINDOW_H
