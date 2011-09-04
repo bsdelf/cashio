@@ -5,6 +5,7 @@
 #include <QtGui>
 #include "WidgetDbBar.h"
 #include "WidgetGraphBar.h"
+#include "CashDb.h"
 
 namespace Ui {
     class MainWindow;
@@ -15,7 +16,7 @@ enum PageIndex {
     PageGraphics,
 };
 
-class MainWindow : public QMainWindow
+class MainWindow: public QMainWindow
 {
     Q_OBJECT
 
@@ -28,7 +29,10 @@ private:
     void switchPage(PageIndex pageName);
 
 public slots:
+    void slotDbBarBtnInsertClicked();
+    void slotDbBarBtnDropClicked();
     void slotDbBarBtnSearchClicked();
+    void slotDbBarBtnSaveClicked();
 
 private slots:
     void slotCbxPageIndexChanged(int index);
@@ -38,6 +42,8 @@ private:
     QStackedLayout* mBarLayout;
     WidgetDbBar mDbBar;
     WidgetGraphBar mGraphBar;
+
+    CashDb mCashDb;
 };
 
 #endif // MAINWINDOW_H

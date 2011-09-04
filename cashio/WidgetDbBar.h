@@ -22,8 +22,10 @@ private:
     Ui::WidgetDbBar* ui;
 
 signals:
+    void sigBtnInsertClicked();
+    void sigBtnDropClicked();
     void sigBtnSearchClicked();
-
+    void sigBtnSaveClicked();
 };
 
 #endif // WidgetDbBar_H

@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     switchPage(PageDatabase);
     ui->widgetSearchBar->hide();
+
+    mCashDb.OpenDb("a.db");
+    mCashDb.InitDb();
 }
 
 MainWindow::~MainWindow()
@@ -24,7 +27,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupSlots()
 {
+    connect(&mDbBar, SIGNAL(sigBtnInsertClicked()), this, SLOT(slotDbBarBtnInsertClicked()));
+    connect(&mDbBar, SIGNAL(sigBtnDropClicked()), this, SLOT(slotDbBarBtnDropClicked()));
     connect(&mDbBar, SIGNAL(sigBtnSearchClicked()), this, SLOT(slotDbBarBtnSearchClicked()));
+    connect(&mDbBar, SIGNAL(sigBtnSaveClicked()), this, SLOT(slotDbBarBtnSaveClicked()));
+
     connect(ui->cbxPage, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCbxPageIndexChanged(int)));
 }
 
@@ -35,12 +42,27 @@ void MainWindow::switchPage(PageIndex pageIndex)
         ui->widgetSearchBar->setShown(false);
 }
 
+void MainWindow::slotDbBarBtnInsertClicked()
+{
+
+}
+
+void MainWindow::slotDbBarBtnDropClicked()
+{
+
+}
+
 void MainWindow::slotDbBarBtnSearchClicked()
 {
     bool shouldShow = ui->widgetSearchBar->isHidden();
     ui->widgetSearchBar->setShown(shouldShow);
     if (shouldShow)
         ui->editSearch->setFocus();
+}
+
+void MainWindow::slotDbBarBtnSaveClicked()
+{
+
 }
 
 void MainWindow::slotCbxPageIndexChanged(int index)
