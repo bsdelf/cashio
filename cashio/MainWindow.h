@@ -5,7 +5,7 @@
 #include <QtGui>
 #include "WidgetDbBar.h"
 #include "WidgetGraphBar.h"
-#include "CashDb.h"
+#include "TableRendererCash.h"
 
 namespace Ui {
     class MainWindow;
@@ -42,8 +42,7 @@ private:
     QStackedLayout* mBarLayout;
     WidgetDbBar mDbBar;
     WidgetGraphBar mGraphBar;
-
-    CashDb mCashDb;
+    TableRendererCash mRendererCash;
 };
 
 #endif // MAINWINDOW_H

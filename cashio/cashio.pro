@@ -25,14 +25,16 @@ SOURCES += main.cpp\
         MainWindow.cpp \
     WidgetDbBar.cpp \
     WidgetGraphBar.cpp \
-    CashDb.cpp
+    CashDb.cpp \
+    TableRendererCash.cpp
 
 HEADERS  += MainWindow.h \
     WidgetDbBar.h \
     WidgetGraphBar.h \
     DbDef.h \
     CashDb.h \
-    SqliteBase.h
+    SqliteBase.h \
+    TableRendererCash.h
 
 FORMS    += MainWindow.ui \
     WidgetDbBar.ui \

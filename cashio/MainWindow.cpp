@@ -16,8 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     switchPage(PageDatabase);
     ui->widgetSearchBar->hide();
 
-    mCashDb.OpenDb("a.db");
-    mCashDb.InitDb();
+    mRendererCash.setupTable(ui->tableWidget);
 }
 
 MainWindow::~MainWindow()
