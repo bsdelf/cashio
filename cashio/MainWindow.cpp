@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     switchPage(PageDatabase);
     ui->widgetSearchBar->hide();
 
-    mRendererCash.setupTable(ui->tableWidget);
+    mRendererCash.setupTable(ui->tableView);
 }
 
 MainWindow::~MainWindow()
@@ -38,12 +38,14 @@ void MainWindow::switchPage(PageIndex pageIndex)
 {
     mBarLayout->setCurrentIndex(pageIndex);
     if (pageIndex != PageDatabase)
+    {
         ui->widgetSearchBar->setShown(false);
+    }
 }
 
 void MainWindow::slotDbBarBtnInsertClicked()
 {
-
+    mRendererCash.prepareNewRow();
 }
 
 void MainWindow::slotDbBarBtnDropClicked()
@@ -61,7 +63,7 @@ void MainWindow::slotDbBarBtnSearchClicked()
 
 void MainWindow::slotDbBarBtnSaveClicked()
 {
-
+    mRendererCash.tryToSaveRows();
 }
 
 void MainWindow::slotCbxPageIndexChanged(int index)

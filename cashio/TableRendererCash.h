@@ -4,25 +4,39 @@
 #include <QtCore>
 #include <QtGui>
 #include "CashDb.h"
+#include "ComboBoxDelegate.h"
 
 class TableRendererCash : public QObject
 {
     Q_OBJECT
-public:
-    explicit TableRendererCash(QObject *parent = 0);
 
 public:
-    void setupTable(QTableView* view);
-    void renderTable();
+    explicit TableRendererCash(QObject *parent = 0);
+    ~TableRendererCash();
+
+public:
+    void openDb(const QString& path);
+    void closeDb();
+
+    void setupTable(QTableView* table);
+    void unsetupTable();
+
+public:
+    void prepareNewRow();
+    bool tryToSaveRows();
+    bool rmSelectedRows();
 
 signals:
 
-public slots:
+private slots:
+    void slotModelDataChanged(QStandardItem * item);
 
 private:
     QTableView* mPtrTable;
     QStandardItemModel mModel;
     CashDb mCashDb;
+    ComboBoxDelegate mCombDelegateInOut;
+    bool mHasNewRow;
 };
 
 #endif // TABLERENDERERCASH_H
