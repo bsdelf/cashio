@@ -37,7 +37,6 @@ private:
     void switchContent(ContentIndex index);
     void switchToolBar(ToolBarIndex index);
 
-
 private slots:
     void slotBtnShowDbPressed();
     void slotBtnShowGraphPressed();

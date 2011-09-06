@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include <sqt/UiHelper.hpp>
 #include <iostream>
 using namespace std;
 
@@ -113,26 +114,10 @@ void MainWindow::slotCbxPageIndexChanged(int index)
 
 void MainWindow::slotBtnEnterSqlModeClicked()
 {
-    QWidget* widget = ui->widgetToolExt->currentWidget();
-    if (widget != NULL)
-    {
-        widget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    }
-    ui->widgetToolExt->setCurrentIndex(ToolExtQuerySql);
-    widget = ui->widgetToolExt->currentWidget();
-    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->widgetToolExt->adjustSize();
+    sqt::switchStackPage(ui->widgetToolExt, ToolExtQuerySql);
 }
 
 void MainWindow::slotBtnQuitSqlModeClicked()
 {
-    QWidget* widget = ui->widgetToolExt->currentWidget();
-    if (widget != NULL)
-    {
-        widget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    }
-    ui->widgetToolExt->setCurrentIndex(ToolExtQuery);
-    widget = ui->widgetToolExt->currentWidget();
-    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->widgetToolExt->adjustSize();
+    sqt::switchStackPage(ui->widgetToolExt, ToolExtQuery);
 }

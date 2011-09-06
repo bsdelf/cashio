@@ -24,6 +24,8 @@ HEADERS  += MainWindow.h \
 
 FORMS    += MainWindow.ui
 
+INCLUDEPATH += sqt
+
 # You should put sqlite3.h into "include",
 # and sqlite3.lib into "lib" for Windows.
 win32 {
