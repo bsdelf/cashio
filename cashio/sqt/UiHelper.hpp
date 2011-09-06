@@ -8,17 +8,29 @@ namespace sqt {
 
 void switchStackPage(QStackedWidget* stack, int index)
 {
-    // minimal previous page
-    QWidget* page = stack->currentWidget();
-    if (page != NULL)
+    if (stack->count() != 0)
     {
-        page->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        QSizePolicy policyMin(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        QSizePolicy policyMax(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+        // minimal previous page
+        if (stack->currentIndex() != index)
+        {
+            stack->currentWidget()->setSizePolicy(policyMin);
+        }
+        else
+        {
+            // minimal all page
+            for (int i = 0; i < stack->count(); ++i)
+            {
+                stack->widget(i)->setSizePolicy(policyMin);
+            }
+        }
+        // show and maximal new page
+        stack->setCurrentIndex(index);
+        stack->currentWidget()->setSizePolicy(policyMax);
+        stack->adjustSize();
     }
-    // show and maximal new page
-    stack->setCurrentIndex(index);
-    page = stack->currentWidget();
-    page->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    stack->adjustSize();
 }
 
 }

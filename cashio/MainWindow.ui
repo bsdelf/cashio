@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Cashio</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -59,7 +59,7 @@
              <string>Query</string>
             </property>
             <property name="checkable">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -138,7 +138,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageQueryCond">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -148,12 +148,12 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Condition</string>
+           <string>Condition:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="editQuery"/>
+         <widget class="QLineEdit" name="editQueryCond"/>
         </item>
         <item>
          <widget class="QPushButton" name="btnQueryCond">
@@ -193,7 +193,7 @@
           <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Input SQL language to query</string>
+             <string>Input SQL language to query:</string>
             </property>
            </widget>
           </item>
@@ -227,7 +227,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QTextEdit" name="editSql">
+         <widget class="QTextEdit" name="editQuerySql">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>

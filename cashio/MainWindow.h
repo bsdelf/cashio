@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QtGui>
-#include "TableRendererCash.h"
+#include "TableHolderCash.h"
 
 namespace Ui {
     class MainWindow;
@@ -20,7 +20,7 @@ enum ToolBarIndex {
 };
 
 enum ToolExtIndex {
-    ToolExtQuery = 0,
+    ToolExtQueryCond = 0,
     ToolExtQuerySql,
 };
 
@@ -36,6 +36,7 @@ private:
     void setupSlots();
     void switchContent(ContentIndex index);
     void switchToolBar(ToolBarIndex index);
+    void focusCurrentEditQuery();
 
 private slots:
     void slotBtnShowDbPressed();
@@ -48,14 +49,12 @@ private slots:
 
     void slotBtnEnterSqlModeClicked();
     void slotBtnQuitSqlModeClicked();
-
-private slots:
     void slotCbxPageIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
 
-    TableRendererCash mRendererCash;
+    TableHolderCash mTableCash;
 };
 
 #endif // MAINWINDOW_H

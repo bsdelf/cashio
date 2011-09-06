@@ -13,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     slotBtnShowDbPressed();
     ui->widgetToolExt->hide();
-    ui->widgetToolExt->setCurrentIndex(ToolExtQuery);
-    mRendererCash.setupTable(ui->tableView);
+    sqt::switchStackPage(ui->widgetToolExt, ToolExtQueryCond);
+    mTableCash.setupTable(ui->tableView);
 }
 
 MainWindow::~MainWindow()
@@ -67,6 +67,20 @@ void MainWindow::switchToolBar(ToolBarIndex pageIndex)
     }
 }
 
+void MainWindow::focusCurrentEditQuery()
+{
+    switch (ui->widgetToolExt->currentIndex())
+    {
+    case ToolExtQueryCond:
+        ui->editQueryCond->setFocus();
+        break;
+
+    case ToolExtQuerySql:
+        ui->editQuerySql->setFocus();
+        break;
+    }
+}
+
 void MainWindow::slotBtnShowDbPressed()
 {
     if (ui->btnShowDb->isChecked())
@@ -81,7 +95,7 @@ void MainWindow::slotBtnShowGraphPressed()
 
 void MainWindow::slotBtnAddClicked()
 {
-    mRendererCash.prepareNewRow();
+    mTableCash.prepareNewRow();
 }
 
 void MainWindow::slotBtnDropClicked()
@@ -95,15 +109,14 @@ void MainWindow::slotBtnQueryClicked()
 
     if (shouldShow)
     {
-        //mToolExtLayout->setCurrentIndex(ToolExtQuery);
-        //ui->editQuery->setFocus();
+        focusCurrentEditQuery();
     }
     ui->widgetToolExt->setShown(shouldShow);
 }
 
 void MainWindow::slotBtnSaveClicked()
 {
-    mRendererCash.tryToSaveRows();
+    mTableCash.tryToSaveRows();
 }
 
 void MainWindow::slotCbxPageIndexChanged(int index)
@@ -115,9 +128,11 @@ void MainWindow::slotCbxPageIndexChanged(int index)
 void MainWindow::slotBtnEnterSqlModeClicked()
 {
     sqt::switchStackPage(ui->widgetToolExt, ToolExtQuerySql);
+    focusCurrentEditQuery();
 }
 
 void MainWindow::slotBtnQuitSqlModeClicked()
 {
-    sqt::switchStackPage(ui->widgetToolExt, ToolExtQuery);
+    sqt::switchStackPage(ui->widgetToolExt, ToolExtQueryCond);
+    focusCurrentEditQuery();
 }
