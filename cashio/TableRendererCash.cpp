@@ -39,7 +39,7 @@ void TableHolderCash::setupTable(QTableView *table)
     mPtrTable->setItemDelegateForColumn(1, &mCombDelegateInOut);
 
     QStringList  list;
-    list << tr("Date") << tr("In/Out") << tr("Amount") << tr("Tags") << tr("Note");
+    list << tr("Date") << tr("IO") << tr("Amount") << tr("Tags") << tr("Note");
     mModel.setHorizontalHeaderLabels(list);
 
     QList<QStandardItem*> rowList;

@@ -15,6 +15,20 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->widgetToolExt->hide();
     sqt::switchStackPage(ui->widgetToolExt, ToolExtQueryCond);
     mTableCash.setupTable(ui->tableView);
+
+    QMenu* menu = new QMenu;
+    menu->addAction("a");
+    menu->addAction("b");
+    ui->btnQueryCond->setMenu(menu);
+
+    QCompleter* c = new QCompleter();
+    c->setCompletionMode(QCompleter::PopupCompletion);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    c->setCompletionColumn(0);
+    QStringList keyWords;
+    keyWords << "date" << "io" << "amount" << "tags" << "note";
+    c->setModel(new QStringListModel(keyWords));
+    ui->editQueryCond->setCompleter(c);
 }
 
 MainWindow::~MainWindow()
@@ -31,8 +45,6 @@ void MainWindow::setupSlots()
     connect(ui->btnDrop, SIGNAL(clicked()), this, SLOT(slotBtnDropClicked()));
     connect(ui->btnQuery, SIGNAL(clicked()), this, SLOT(slotBtnQueryClicked()));
     connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(slotBtnSaveClicked()));
-
-    //connect(ui->cbxPage, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCbxPageIndexChanged(int)));
 
     connect(ui->btnEnterSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnEnterSqlModeClicked()));
     connect(ui->btnQuitSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnQuitSqlModeClicked()));
