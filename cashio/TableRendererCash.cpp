@@ -52,7 +52,9 @@ void TableHolderCash::setupTable(QTableView *table)
    // mModel.insertRow();
     mPtrTable->setModel(&mModel);
     mPtrTable->resizeColumnsToContents();
-    mPtrTable->edit(mModel.index(0, 0));
+    QModelIndex index = mModel.index(0, 0);
+    mPtrTable->setCurrentIndex(index);
+    mPtrTable->edit(index);
 
     connect(&mModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(slotModelDataChanged(QStandardItem*)));
 
@@ -78,12 +80,11 @@ void TableHolderCash::prepareNewRow()
     mModel.insertRow(0, row);
     mHasNewRow = true;
 
-
     mPtrTable->setModel(&mModel);
     mPtrTable->resizeColumnsToContents();
     mPtrTable->horizontalHeader()->setStretchLastSection(true);
 
-    QModelIndex index = mModel.index(0, 1);
+    QModelIndex index = mModel.index(0, 2);
     mPtrTable->setCurrentIndex(index);
     mPtrTable->edit(index);
 }

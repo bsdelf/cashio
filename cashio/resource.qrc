@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>res/add.png</file>
+        <file>res/drop.png</file>
+        <file>res/query.png</file>
+        <file>res/tags.png</file>
+        <file>res/warr.png</file>
+        <file>res/conf.png</file>
+        <file>res/db.png</file>
+        <file>res/graph.png</file>
+        <file>res/open.png</file>
+    </qresource>
+</RCC>

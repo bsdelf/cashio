@@ -34,7 +34,7 @@ INCLUDEPATH += sqt
 # and sqlite3.lib into "lib" for Windows.
 win32 {
     INCLUDEPATH += $$_PRO_FILE_PWD_\include
-    LIBS += -L$$_PRO_FILE_PWD_\lib\ -lsqlite3.lib
+    LIBS += -L$$_PRO_FILE_PWD_\lib\ -lsqlite3
     HEADERS += ConfigWin.h
 }
 
@@ -44,3 +44,6 @@ unix {
     LIBS += -lsqlite3
     HEADERS += ConfigUnix.h
 }
+
+RESOURCES += \
+    resource.qrc
