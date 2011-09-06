@@ -41,8 +41,14 @@
           </property>
           <item>
            <widget class="QToolButton" name="btnOpen">
+            <property name="toolTip">
+             <string>Open Database</string>
+            </property>
+            <property name="statusTip">
+             <string>Open Database</string>
+            </property>
             <property name="text">
-             <string>...</string>
+             <string/>
             </property>
             <property name="icon">
              <iconset resource="resource.qrc">
@@ -53,6 +59,12 @@
               <width>28</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="popupMode">
+             <enum>QToolButton::DelayedPopup</enum>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonIconOnly</enum>
             </property>
             <property name="autoRaise">
              <bool>true</bool>
@@ -68,6 +80,12 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnAdd">
+            <property name="toolTip">
+             <string>Add Record</string>
+            </property>
+            <property name="statusTip">
+             <string>Add Record</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -88,6 +106,12 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnDrop">
+            <property name="toolTip">
+             <string>Remove Record</string>
+            </property>
+            <property name="statusTip">
+             <string>Remove Record</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -108,6 +132,12 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnQuery">
+            <property name="toolTip">
+             <string>Show/Hide Query Bar</string>
+            </property>
+            <property name="statusTip">
+             <string>Show/Hide Query Bar</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -135,6 +165,12 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnTags">
+            <property name="toolTip">
+             <string>Edit All Tags</string>
+            </property>
+            <property name="statusTip">
+             <string>Edit All Tags</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -155,6 +191,12 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnGraph">
+            <property name="toolTip">
+             <string>Show/Hide Graph</string>
+            </property>
+            <property name="statusTip">
+             <string>Show/Hide Graph</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
@@ -182,6 +224,12 @@
           </item>
           <item>
            <widget class="QToolButton" name="btnConf">
+            <property name="toolTip">
+             <string>Preference</string>
+            </property>
+            <property name="statusTip">
+             <string>Preference</string>
+            </property>
             <property name="text">
              <string>...</string>
             </property>
