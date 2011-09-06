@@ -37,7 +37,7 @@ win32 {
         INCLUDEPATH += $$_PRO_FILE_PWD_\include
     }
     exists(lib) {
-        LIBS += -L"$$_PRO_FILE_PWD_\lib\" -lsqlite3.lib"
+        LIBS += -L$$_PRO_FILE_PWD_\lib\ -lsqlite3
     }
 }
 
