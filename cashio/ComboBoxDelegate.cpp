@@ -14,6 +14,11 @@ void ComboBoxDelegate::addText(const QString &text)
     mOptions.append(text);
 }
 
+void ComboBoxDelegate::clearText()
+{
+    mOptions.clear();
+}
+
 QWidget* ComboBoxDelegate::createEditor(
     QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {

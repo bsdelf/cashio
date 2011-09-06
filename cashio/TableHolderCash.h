@@ -1,18 +1,18 @@
-#ifndef TABLERENDERERCASH_H
-#define TABLERENDERERCASH_H
+#ifndef TableHolderCash_H
+#define TableHolderCash_H
 
 #include <QtCore>
 #include <QtGui>
 #include "CashDb.h"
 #include "ComboBoxDelegate.h"
 
-class TableRendererCash : public QObject
+class TableHolderCash : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit TableRendererCash(QObject *parent = 0);
-    ~TableRendererCash();
+    explicit TableHolderCash(QObject *parent = 0);
+    ~TableHolderCash();
 
 public:
     void openDb(const QString& path);
@@ -39,4 +39,4 @@ private:
     bool mHasNewRow;
 };
 
-#endif // TABLERENDERERCASH_H
+#endif // TableHolderCash_H

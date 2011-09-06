@@ -23,7 +23,8 @@ const char SQL_CREATE_TABLE_ACCOUNT[] =
     "create table if not exists %s ("
     "InsTime datetime primary key,"
     "InOut int,"
-    "CashAmount double);";
+    "CashAmount double,"
+    "Note text);";
 const char SQL_CREATE_TABLE_ACCOUNT_TAG[] =
     "create table if not exists %s ("
     "ID integer primary key autoincrement,"

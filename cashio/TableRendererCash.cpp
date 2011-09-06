@@ -1,8 +1,8 @@
-#include "TableRendererCash.h"
+#include "TableHolderCash.h"
 #include <iostream>
 using namespace std;
 
-TableRendererCash::TableRendererCash(QObject *parent) :
+TableHolderCash::TableHolderCash(QObject *parent) :
     QObject(parent),
     mHasNewRow(false)
 {
@@ -12,23 +12,23 @@ TableRendererCash::TableRendererCash(QObject *parent) :
     mCombDelegateInOut.addText("Out");
 }
 
-TableRendererCash::~TableRendererCash()
+TableHolderCash::~TableHolderCash()
 {
 
 }
 
-void TableRendererCash::openDb(const QString &path)
+void TableHolderCash::openDb(const QString &path)
 {
     mCashDb.OpenDb(path.toStdString());
     mCashDb.InitDb();
 }
 
-void TableRendererCash::closeDb()
+void TableHolderCash::closeDb()
 {
     mCashDb.CloseDb();
 }
 
-void TableRendererCash::setupTable(QTableView *table)
+void TableHolderCash::setupTable(QTableView *table)
 {
     mPtrTable = table;
 
@@ -39,19 +39,15 @@ void TableRendererCash::setupTable(QTableView *table)
     mPtrTable->setItemDelegateForColumn(1, &mCombDelegateInOut);
 
     QStringList  list;
-    list << tr("Date") << tr("In/Out") << tr("Amount") << tr("Tags");
+    list << tr("Date") << tr("IO") << tr("Amount") << tr("Tags") << tr("Note");
     mModel.setHorizontalHeaderLabels(list);
 
     QList<QStandardItem*> rowList;
-    QStandardItem* item;
-    item = new QStandardItem("");
-    rowList << item;
-    item = new QStandardItem("Out");
-    rowList << item;
-    item = new QStandardItem("a");
-    rowList << item;
-    item = new QStandardItem("a");
-    rowList << item;
+    rowList << new QStandardItem("");
+    rowList << new QStandardItem("Out");
+    rowList << new QStandardItem("100");
+    rowList << new QStandardItem("tag");
+    rowList << new QStandardItem("");
     mModel.appendRow(rowList);
    // mModel.insertRow();
     mPtrTable->setModel(&mModel);
@@ -62,16 +58,16 @@ void TableRendererCash::setupTable(QTableView *table)
 
 }
 
-void TableRendererCash::unsetupTable()
+void TableHolderCash::unsetupTable()
 {
 
 }
 
-void TableRendererCash::prepareNewRow()
+void TableHolderCash::prepareNewRow()
 {
     QList<QStandardItem*> row;
     row << new QStandardItem(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"));
-    row << new QStandardItem();
+    row << new QStandardItem("Out");
     row << new QStandardItem();
     row << new QStandardItem();
 
@@ -92,7 +88,7 @@ void TableRendererCash::prepareNewRow()
     mPtrTable->edit(index);
 }
 
-bool TableRendererCash::tryToSaveRows()
+bool TableHolderCash::tryToSaveRows()
 {
     mHasNewRow = false;
     for (int i = 0; i < mModel.columnCount(); ++i)
@@ -107,7 +103,7 @@ bool TableRendererCash::tryToSaveRows()
     return true;
 }
 
-bool TableRendererCash::rmSelectedRows()
+bool TableHolderCash::rmSelectedRows()
 {
     if (mHasNewRow)
     {
@@ -117,7 +113,9 @@ bool TableRendererCash::rmSelectedRows()
     return true;
 }
 
-void TableRendererCash::slotModelDataChanged(QStandardItem * item)
+void TableHolderCash::slotModelDataChanged(QStandardItem * item)
 {
+    mPtrTable->resizeColumnsToContents();
+    mPtrTable->horizontalHeader()->setStretchLastSection(true);
     cout << "r:" << item->row() << " c:" << item->column() << endl;
 }

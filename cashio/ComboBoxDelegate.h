@@ -13,6 +13,7 @@ public:
     ~ComboBoxDelegate();
 
     void addText(const QString& text);
+    void clearText();
 
 public:
     QWidget *createEditor(
