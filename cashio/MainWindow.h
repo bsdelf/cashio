@@ -3,17 +3,25 @@
 
 #include <QtCore>
 #include <QtGui>
-#include "WidgetDbBar.h"
-#include "WidgetGraphBar.h"
 #include "TableRendererCash.h"
 
 namespace Ui {
     class MainWindow;
 }
 
-enum PageIndex {
-    PageDatabase = 0,
-    PageGraphics,
+enum ContentIndex {
+    ContentDb = 0,
+    ContentGraph,
+};
+
+enum ToolBarIndex {
+    ToolBarDatabase = 0,
+    ToolBarGraphics,
+};
+
+enum ToolExtIndex {
+    ToolExtQuery = 0,
+    ToolExtQuerySql,
 };
 
 class MainWindow: public QMainWindow
@@ -26,22 +34,28 @@ public:
 
 private:
     void setupSlots();
-    void switchPage(PageIndex pageName);
+    void switchContent(ContentIndex index);
+    void switchToolBar(ToolBarIndex index);
 
-public slots:
-    void slotDbBarBtnInsertClicked();
-    void slotDbBarBtnDropClicked();
-    void slotDbBarBtnSearchClicked();
-    void slotDbBarBtnSaveClicked();
+
+private slots:
+    void slotBtnShowDbPressed();
+    void slotBtnShowGraphPressed();
+
+    void slotBtnAddClicked();
+    void slotBtnDropClicked();
+    void slotBtnQueryClicked();
+    void slotBtnSaveClicked();
+
+    void slotBtnEnterSqlModeClicked();
+    void slotBtnQuitSqlModeClicked();
 
 private slots:
     void slotCbxPageIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
-    QStackedLayout* mBarLayout;
-    WidgetDbBar mDbBar;
-    WidgetGraphBar mGraphBar;
+
     TableRendererCash mRendererCash;
 };
 

@@ -71,7 +71,7 @@ void TableRendererCash::prepareNewRow()
 {
     QList<QStandardItem*> row;
     row << new QStandardItem(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"));
-    row << new QStandardItem();
+    row << new QStandardItem("Out");
     row << new QStandardItem();
     row << new QStandardItem();
 

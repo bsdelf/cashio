@@ -11,34 +11,25 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    WidgetDbBar.cpp \
-    WidgetGraphBar.cpp \
     CashDb.cpp \
     TableRendererCash.cpp \
     ComboBoxDelegate.cpp
 
 HEADERS  += MainWindow.h \
-    WidgetDbBar.h \
-    WidgetGraphBar.h \
     DbDef.h \
     CashDb.h \
     SqliteBase.h \
     TableRendererCash.h \
     ComboBoxDelegate.h
 
-FORMS    += MainWindow.ui \
-    WidgetDbBar.ui \
-    WidgetGraphBar.ui
+FORMS    += MainWindow.ui
 
 # You should put sqlite3.h into "include",
 # and sqlite3.lib into "lib" for Windows.
 win32 {
-    exists(include) {
-        INCLUDEPATH += $$_PRO_FILE_PWD_\include
-    }
-    exists(lib) {
-        LIBS += -L"$$_PRO_FILE_PWD_\lib\" -lsqlite3.lib"
-    }
+    INCLUDEPATH += $$_PRO_FILE_PWD_\include
+    LIBS += -L$$_PRO_FILE_PWD_\lib\ -lsqlite3.lib
+
 }
 
 # You should have sqlite3 installed under /usr .

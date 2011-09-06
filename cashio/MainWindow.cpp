@@ -1,21 +1,18 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include <iostream>
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setupSlots();
+    setupSlots();   
 
-    mBarLayout = new QStackedLayout(ui->widgetBar);
-    mBarLayout->addWidget(&mDbBar);
-    mBarLayout->addWidget(&mGraphBar);
-    ui->widgetBar->setLayout(mBarLayout);
-
-    switchPage(PageDatabase);
-    ui->widgetSearchBar->hide();
-
+    slotBtnShowDbPressed();
+    ui->widgetToolExt->hide();
+    ui->widgetToolExt->setCurrentIndex(ToolExtQuery);
     mRendererCash.setupTable(ui->tableView);
 }
 
@@ -26,48 +23,116 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupSlots()
 {
-    connect(&mDbBar, SIGNAL(sigBtnInsertClicked()), this, SLOT(slotDbBarBtnInsertClicked()));
-    connect(&mDbBar, SIGNAL(sigBtnDropClicked()), this, SLOT(slotDbBarBtnDropClicked()));
-    connect(&mDbBar, SIGNAL(sigBtnSearchClicked()), this, SLOT(slotDbBarBtnSearchClicked()));
-    connect(&mDbBar, SIGNAL(sigBtnSaveClicked()), this, SLOT(slotDbBarBtnSaveClicked()));
+    connect(ui->btnShowDb, SIGNAL(clicked()), this, SLOT(slotBtnShowDbPressed()));
+    connect(ui->btnShowGraph, SIGNAL(clicked()), this, SLOT(slotBtnShowGraphPressed()));
 
-    connect(ui->cbxPage, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCbxPageIndexChanged(int)));
+    connect(ui->btnAdd, SIGNAL(clicked()), this, SLOT(slotBtnAddClicked()));
+    connect(ui->btnDrop, SIGNAL(clicked()), this, SLOT(slotBtnDropClicked()));
+    connect(ui->btnQuery, SIGNAL(clicked()), this, SLOT(slotBtnQueryClicked()));
+    connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(slotBtnSaveClicked()));
+
+    //connect(ui->cbxPage, SIGNAL(currentIndexChanged(int)), this, SLOT(slotCbxPageIndexChanged(int)));
+
+    connect(ui->btnEnterSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnEnterSqlModeClicked()));
+    connect(ui->btnQuitSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnQuitSqlModeClicked()));
 }
 
-void MainWindow::switchPage(PageIndex pageIndex)
+void MainWindow::switchContent(ContentIndex index)
 {
-    mBarLayout->setCurrentIndex(pageIndex);
-    if (pageIndex != PageDatabase)
+    switch (index)
     {
-        ui->widgetSearchBar->setShown(false);
+    case ContentDb:
+    {
+        ui->btnShowDb->setChecked(true);
+        ui->btnShowGraph->setChecked(false);
+    }
+        break;
+
+    case ContentGraph:
+    {
+        ui->btnShowDb->setChecked(false);
+        ui->btnShowGraph->setChecked(true);
+    }
+        break;
     }
 }
 
-void MainWindow::slotDbBarBtnInsertClicked()
+void MainWindow::switchToolBar(ToolBarIndex pageIndex)
+{
+    ui->widgetToolBar->setCurrentIndex(pageIndex);
+    if (pageIndex != ToolBarDatabase)
+    {
+        ui->widgetToolExt->setShown(false);
+    }
+}
+
+void MainWindow::slotBtnShowDbPressed()
+{
+    if (ui->btnShowDb->isChecked())
+        ui->btnShowDb->setChecked(true);
+    ui->btnShowGraph->setChecked(false);
+}
+
+void MainWindow::slotBtnShowGraphPressed()
+{
+    ui->btnShowDb->setChecked(false);
+}
+
+void MainWindow::slotBtnAddClicked()
 {
     mRendererCash.prepareNewRow();
 }
 
-void MainWindow::slotDbBarBtnDropClicked()
+void MainWindow::slotBtnDropClicked()
 {
 
 }
 
-void MainWindow::slotDbBarBtnSearchClicked()
+void MainWindow::slotBtnQueryClicked()
 {
-    bool shouldShow = ui->widgetSearchBar->isHidden();
-    ui->widgetSearchBar->setShown(shouldShow);
+    bool shouldShow = ui->widgetToolExt->isHidden();
+
     if (shouldShow)
-        ui->editSearch->setFocus();
+    {
+        //mToolExtLayout->setCurrentIndex(ToolExtQuery);
+        //ui->editQuery->setFocus();
+    }
+    ui->widgetToolExt->setShown(shouldShow);
 }
 
-void MainWindow::slotDbBarBtnSaveClicked()
+void MainWindow::slotBtnSaveClicked()
 {
     mRendererCash.tryToSaveRows();
 }
 
 void MainWindow::slotCbxPageIndexChanged(int index)
 {
-    PageIndex pageIndex = (PageIndex)index;
-    switchPage(pageIndex);
+    ToolBarIndex toolbarIndex = (ToolBarIndex)index;
+    switchToolBar(toolbarIndex);
+}
+
+void MainWindow::slotBtnEnterSqlModeClicked()
+{
+    QWidget* widget = ui->widgetToolExt->currentWidget();
+    if (widget != NULL)
+    {
+        widget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    }
+    ui->widgetToolExt->setCurrentIndex(ToolExtQuerySql);
+    widget = ui->widgetToolExt->currentWidget();
+    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->widgetToolExt->adjustSize();
+}
+
+void MainWindow::slotBtnQuitSqlModeClicked()
+{
+    QWidget* widget = ui->widgetToolExt->currentWidget();
+    if (widget != NULL)
+    {
+        widget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    }
+    ui->widgetToolExt->setCurrentIndex(ToolExtQuery);
+    widget = ui->widgetToolExt->currentWidget();
+    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->widgetToolExt->adjustSize();
 }
