@@ -50,8 +50,8 @@ void TableHolderCash::setupTable(QTableView *table)
     rowList << new QStandardItem("100");
     rowList << new QStandardItem("tag");
     rowList << new QStandardItem("");
-    mModel.appendRow(rowList);
-   // mModel.insertRow();
+    mModel.insertRow(0, rowList);
+
     mPtrTable->setModel(&mModel);
     mPtrTable->resizeColumnsToContents();
     QModelIndex index = mModel.index(0, 0);
@@ -197,5 +197,6 @@ void TableHolderCash::syncNewRecord()
     cout << "amout:" << row.amount << endl;
     cout << "note:" << row.note << endl;
 
-    mHasNewRecord = !mCashDb.InsertRow(row);
+    mCashDb.InsertRow(row);
+    mHasNewRecord = false;
 }

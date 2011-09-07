@@ -3,11 +3,12 @@
 using namespace std;
 #include "DbDef.h"
 
-const int SQL_BUF_SIZE = 200;
+const int SQL_BUF_SIZE = 500;
 
 CashDb::CashDb()
 {
     mSqlBuf = new char[SQL_BUF_SIZE];
+    mSqlBufSize = SQL_BUF_SIZE;
 }
 
 CashDb::~CashDb()
@@ -75,9 +76,16 @@ void CashDb::GetTags(TagVector &tags)
     tags.clear();
 }
 
-bool CashDb::InsertRow(const Row &item)
+bool CashDb::HasTag(const string &tagName)
 {
-    return true;
+    FORMAT_SQL(SQL_QUERY_HAS_TAG, tagName.c_str());
+    Prepare();
+    return (Step() == StepRow) ? true : false;
+}
+
+void CashDb::InsertRow(const Row &item)
+{
+
 }
 
 void CashDb::DropRow(const string &date)
@@ -102,6 +110,13 @@ void CashDb::GetRows(const DateVector& range, RowVector &rows)
     {
 
     }
+}
+
+bool CashDb::HasRow(const string &date)
+{
+    FORMAT_SQL(SQL_QUERY_HAS_ACCOUNT, date.c_str());
+    Prepare();
+    return (Step() == StepRow) ? true : false;
 }
 
 string CashDb::GetTime()

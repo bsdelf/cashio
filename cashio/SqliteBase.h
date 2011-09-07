@@ -10,7 +10,7 @@ using namespace std;
 #pragma warning(disable:4996)
 #endif
 
-#define FORMAT_SQL(...) snprintf(mSqlBuf, SQL_BUF_SIZE, __VA_ARGS__)
+#define FORMAT_SQL(...) snprintf(mSqlBuf, mSqlBufSize, __VA_ARGS__)
 
 enum StepStatus
 {
@@ -27,7 +27,7 @@ public:
     SqliteBase():
         mDbName(""),
         mSqlBuf(NULL),
-        mSqlBufLen(0),
+        mSqlBufSize(0),
         mDbConn(NULL),
         mStmt(NULL)
     {
@@ -60,6 +60,11 @@ protected:
         sqlite3_exec(mDbConn, sql.c_str(), NULL, 0, 0);
     }
 
+    void Prepare()
+    {
+        Prepare(mSqlBuf);
+    }
+
     void Prepare(const string &sql)
     {
         sqlite3_prepare_v2(mDbConn, sql.c_str(), -1, &mStmt, 0);
@@ -83,7 +88,7 @@ protected:
 protected:
     string mDbName;
     char* mSqlBuf;
-    size_t mSqlBufLen;
+    size_t mSqlBufSize;
     sqlite3* mDbConn;
     sqlite3_stmt* mStmt;
 };

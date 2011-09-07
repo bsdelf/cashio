@@ -1,8 +1,6 @@
 #ifndef CashDb_H
 #define CashDb_H
 
-#include <set>
-#include <map>
 #include <vector>
 #include <string>
 using namespace std;
@@ -43,12 +41,14 @@ public:
     void DropTag(const string& tagName);
     void UpdateTag(const string& tagName, const Tag& newTag);
     void GetTags(TagVector& tags);
+    bool HasTag(const string& tagName);
 
-    bool InsertRow(const Row& item);
+    void InsertRow(const Row& item);
     void DropRow(const string& date);
     void UpdateRow(const string& date, const Row& row);
     void QueryRows(const string& query, DateVector& range);
     void GetRows(const DateVector& range, RowVector &rows);
+    bool HasRow(const string& date);
 
     string GetTime();
 };
