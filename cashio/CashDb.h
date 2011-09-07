@@ -17,7 +17,7 @@ struct Tag
 struct Row
 {
     string date;
-    int inout;
+    string io;
     double amount;
     vector<string> tags;
     string note;
@@ -44,7 +44,7 @@ public:
     void UpdateTag(const string& tagName, const Tag& newTag);
     void GetTags(TagVector& tags);
 
-    void InsertRow(const Row& item);
+    bool InsertRow(const Row& item);
     void DropRow(const string& date);
     void UpdateRow(const string& date, const Row& row);
     void QueryRows(const string& query, DateVector& range);

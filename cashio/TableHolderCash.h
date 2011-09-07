@@ -7,6 +7,15 @@
 #include "QComboBoxDelegate.hpp"
 #include "QColorfulCellDelegate.hpp"
 
+enum ColumnIndex
+{
+    ColumnDate = 0,
+    ColumnIO,
+    ColumnAmount,
+    ColumnTag,
+    ColumnNote
+};
+
 class TableHolderCash : public QObject
 {
     Q_OBJECT
@@ -27,6 +36,10 @@ public:
     bool tryToSaveRows();
     bool rmSelectedRows();
 
+private:
+    bool hasInvaildCell();
+    void syncNewRecord();
+
 signals:
 
 private slots:
@@ -40,7 +53,8 @@ private:
     sqt::QComboBoxDelegate mCombDelegateInOut;
     sqt::QColorfulCellDelegate mColorfulCellDelegate;
 
-    bool mHasNewRow;
+    bool mHasNewRecord;
+    bool mHasInvaildCell;
 };
 
 #endif // TableHolderCash_H

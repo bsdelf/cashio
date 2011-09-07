@@ -15,12 +15,12 @@ public:
     ~QColorfulCellDelegate() {}
 
 public:
-    void insertIndex(const QModelIndex &index)
+    void insertIndex(const QModelIndex& index)
     {
         mIndexSet.insert(index);
     }
 
-    void removeIndex(const QModelIndex &index)
+    void removeIndex(const QModelIndex& index)
     {
         mIndexSet.remove(index);
     }

@@ -75,9 +75,9 @@ void CashDb::GetTags(TagVector &tags)
     tags.clear();
 }
 
-void CashDb::InsertRow(const Row &item)
+bool CashDb::InsertRow(const Row &item)
 {
-
+    return true;
 }
 
 void CashDb::DropRow(const string &date)

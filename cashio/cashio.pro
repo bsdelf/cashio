@@ -12,8 +12,8 @@ TEMPLATE = app
 SOURCES += main.cpp\
         MainWindow.cpp \
     CashDb.cpp \
-    TableRendererCash.cpp \
-    TableHolderTags.cpp
+    TableHolderTags.cpp \
+    TableHolderCash.cpp
 
 HEADERS  += MainWindow.h \
     DbDef.h \
