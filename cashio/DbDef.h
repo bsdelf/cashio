@@ -34,7 +34,7 @@ const char SQL_INSERT_TAG[] =
 const char SQL_UPDATE_TAG[] =
     "update cashio_tags set Tag='%s', Color=%d;";
 const char SQL_DROP_TAG[] =
-    "drop from cashio_tags where Tag='%s';";
+    "delete from cashio_tags where Tag='%s';";
 const char SQL_QUERY_TAGS_HAS_TAG[] =
     "select Tag from cashio_tags where Tag='%s';";
 
@@ -48,13 +48,13 @@ const char SQL_CREATE_TABLE_ACCOUNT[] =
 const char SQL_INSERT_ACCOUNT[] =
     "insert into cashio_account values('%s', '%s', %.2f, '%s');";
 const char SQL_UPDATE_ACCOUNT[] =
-    "update cashio_account set IO='%s', Amount=%f, Note='%s' where Date='%s';";
+    "update cashio_account set Date='%s', IO='%s', Amount=%f, Note='%s' where Date='%s';";
 const char SQL_DROP_ACCOUNT[] =
-    "drop from cashio_account where Date='%s';";
+    "delete from cashio_account where Date='%s';";
 const char SQL_QUERY_ACCOUNT_HAS_DATE[] =
     "select Date from cashio_account where Date='%s';";
 const char SQL_QUERY_ACOUNT_ALL_DATE[] =
-    "select Date from cashio_account order by Date;";
+    "select Date from cashio_account order by Date desc;";
 const char SQL_QUERY_ACCOUNT_ROW[] =
     "select * from cashio_account where Date='%s';";
 
@@ -70,9 +70,10 @@ const char SQL_CREATE_TABLE_ACCOUNT_TAG[] =
     "   on delete cascade on update cascade );";
 const char SQL_INSERT_ACCOUNT_TAG[] =
     "insert into cashio_account_tag values(null, '%s', '%s');";
-const char SQL_DROP_ACCOUNT_TAG[] =
-    "drop from cashio_account_tag where Date='%s' and Tag='%s';";
+const char SQL_DELETE_ACCOUNT_TAG[] =
+    "delete from cashio_account_tag where Date='%s';";
 const char SQL_QUERY_ACCOUNT_TAG[] =
-    "select Tag from cashio_account_tag where Date='%s';";
+    "select Tag, Color from cashio_tags where Tag in ("
+    "   select Tag from cashio_account_tag where Date='%s');";
 
 #endif // DBDEF_H

@@ -3,16 +3,17 @@
 
 #include <QtCore>
 #include <QtGui>
+#include "QBaseCellDelegate.hpp"
 
 namespace sqt {
 
-class QComboBoxDelegate : public QItemDelegate
+class QComboBoxDelegate : public QBaseCellDelegate
 {
     Q_OBJECT
 
 public:
-    QComboBoxDelegate() {};
-    ~QComboBoxDelegate() {};
+    QComboBoxDelegate() {}
+    ~QComboBoxDelegate() {}
 
     void addText(const QString& text)
     {
@@ -56,6 +57,7 @@ public:
     {
         editor->setGeometry(option.rect);
     }
+
 
 private:
     QStringList mOptions;

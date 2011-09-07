@@ -5,7 +5,8 @@
 #include <QtGui>
 #include "CashDb.h"
 #include "QComboBoxDelegate.hpp"
-#include "QColorfulCellDelegate.hpp"
+#include "QBaseCellDelegate.hpp"
+#include "QTagCellDelegate.hpp"
 
 enum ColumnIndex
 {
@@ -52,7 +53,8 @@ private:
     CashDb mCashDb;
 
     sqt::QComboBoxDelegate mCombDelegateInOut;
-    sqt::QColorfulCellDelegate mColorfulCellDelegate;
+    sqt::QBaseCellDelegate mVaildCellDelegate;
+    sqt::QTagCellDelegate mTagCellDelegate;
 
     bool mHasNewRecord;
     bool mHasInvaildCell;

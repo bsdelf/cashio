@@ -1,18 +1,22 @@
-#ifndef QColorfulCellDelegate_hpp
-#define QColorfulCellDelegate_hpp
+#ifndef QBaseCellDelegate_hpp
+#define QBaseCellDelegate_hpp
 
 #include <QtGui>
 #include <QtCore>
 
 namespace sqt {
 
-class QColorfulCellDelegate: public QItemDelegate
+class QBaseCellDelegate: public QItemDelegate
 {
     Q_OBJECT
 
 public:
-    QColorfulCellDelegate() {}
-    ~QColorfulCellDelegate() {}
+    QBaseCellDelegate():
+        mAlignment(Qt::AlignLeft | Qt::AlignVCenter)
+    {
+    }
+
+    ~QBaseCellDelegate() {}
 
 public:
     void insertIndex(const QModelIndex& index)
@@ -30,6 +34,11 @@ public:
         mCellColor = color;
     }
 
+    void setTextAlignment(const Qt::Alignment& alignment)
+    {
+        mAlignment = alignment;
+    }
+
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
@@ -40,13 +49,16 @@ public:
             newOption.palette.setColor(QPalette::Base, mCellColor);
             newOption.palette.setColor(QPalette::Window, mCellColor);
             newOption.palette.setColor(QPalette::Highlight, mCellColor);
+
         }
+        newOption.displayAlignment = mAlignment;
         QItemDelegate::paint(painter, newOption, index);
     }
 
-private:
+protected:
     QSet<QModelIndex> mIndexSet;
     QColor mCellColor;
+    Qt::Alignment mAlignment;
 };
 
 }

@@ -58,7 +58,8 @@ void CashDb::ClearDb()
 
 void CashDb::InsertTag(const Tag &tag)
 {
-
+    FORMAT_SQL(SQL_INSERT_TAG, tag.name.c_str(), tag.color);
+    ExecSql();
 }
 
 void CashDb::DropTag(const string &tagName)
@@ -84,13 +85,25 @@ bool CashDb::HasTag(const string &tagName)
 }
 
 void CashDb::InsertRow(const Row &row)
-{
+{    
+    // insert into account
     FORMAT_SQL(SQL_INSERT_ACCOUNT,
                row.date.c_str(),
                row.io.c_str(),
                row.amount,
                row.note.c_str());
     ExecSql();
+
+    // complete tags and relationships
+    for (size_t i = 0; i < row.tags.size(); ++i)
+    {
+        Tag tag = row.tags[i];
+        if (!HasTag(tag.name))
+            InsertTag(tag);
+
+        FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, row.date.c_str(), tag.name.c_str());
+        ExecSql();
+    }
 }
 
 void CashDb::DropRow(const string &date)
@@ -98,14 +111,31 @@ void CashDb::DropRow(const string &date)
 
 }
 
-void CashDb::UpdateRow(const string &date, const Row &row)
+void CashDb::UpdateRow(const string &oldDate, const Row &row)
 {
+    // clear all old tags
+    FORMAT_SQL(SQL_DELETE_ACCOUNT_TAG, oldDate.c_str());
+    ExecSql();
+
+    // update account
     FORMAT_SQL(SQL_UPDATE_ACCOUNT,
+               row.date.c_str(),
                row.io.c_str(),
                row.amount,
                row.note.c_str(),
-               date.c_str());
+               oldDate.c_str());
     ExecSql();
+
+    // complete tags and relationships
+    for (size_t i = 0; i < row.tags.size(); ++i)
+    {
+        Tag tag = row.tags[i];
+        if (!HasTag(tag.name))
+            InsertTag(tag);
+
+        FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, row.date.c_str(), tag.name.c_str());
+        ExecSql();
+    }
 }
 
 void CashDb::QueryAllRows(DateVector& range)
@@ -136,13 +166,24 @@ void CashDb::GetRows(const DateVector& range, RowVector &rows)
     {
         FORMAT_SQL(SQL_QUERY_ACCOUNT_ROW, range[i].c_str());
         Prepare();
-        if (NextStep() != StepRow)
-            return;
+        if (NextStep() != StepRow) return;
         Row* row = new Row;
         row->date = ColumnString(0);
         row->io = ColumnString(1);
         row->amount = ColumnDouble(2);
         row->note = ColumnString(3);
+
+        FORMAT_SQL(SQL_QUERY_ACCOUNT_TAG, range[i].c_str());
+        Prepare();
+        row->tags.clear();
+        while (NextStep() == StepRow)
+        {
+            Tag tag;
+            tag.name = ColumnString(0);
+            tag.color = ColumnInt(1);
+            row->tags.push_back(tag);
+        }
+
         rows.push_back(row);
     }
 }

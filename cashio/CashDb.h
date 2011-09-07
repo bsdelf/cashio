@@ -17,7 +17,7 @@ struct Row
     string date;
     string io;
     double amount;
-    vector<string> tags;
+    vector<Tag> tags;
     string note;
 };
 

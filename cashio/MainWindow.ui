@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Cashio</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/icon/res/yuan.png</normaloff>:/icon/res/yuan.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">

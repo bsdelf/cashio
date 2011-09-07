@@ -23,8 +23,9 @@ HEADERS  += MainWindow.h \
     ConfigUnix.h \
     TableHolderTags.h \
     TableHolderCash.h \
-    QColorfulCellDelegate.hpp \
-    QComboBoxDelegate.hpp
+    QComboBoxDelegate.hpp \
+    QBaseCellDelegate.hpp \
+    QTagCellDelegate.hpp
 
 FORMS    += MainWindow.ui
 
@@ -36,13 +37,14 @@ win32 {
     INCLUDEPATH += $$_PRO_FILE_PWD_\include
     LIBS += -L$$_PRO_FILE_PWD_\lib\ -lsqlite3
     HEADERS += ConfigWin.h
+    RC_FILE += cashio.rc
 }
 
 # You should have sqlite3 installed under /usr .
 unix {
     INCLUDEPATH += /usr/local/include
     LIBS += -lsqlite3
-    HEADERS += ConfigUnix.h
+    HEADERS += ConfigUnix.h    
 }
 
 RESOURCES += \
