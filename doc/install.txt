@@ -1,0 +1,17 @@
+Requirements
+1.MSVC/GCC
+2.Qt 4.7 or later
+3.Sqlite 3.6.19 or later
+(QtCreator is recommended)
+
+For Windows
+1.Make directory "include" and "lib" under cashio.pro's root dir,
+  put sqlite3.h under include/,
+  put sqlite3.lib under lib/.
+2.Use QtCreator to open the project file, build it!
+3.Put sqlite3.dll under build dir, click QtCreator's run button.
+4.Copy the bin and dlls into a seperate directory, enjoy it.
+
+Bug reports
+Email: shen.elf#gmai1.com (# to @, 1 to l)
+
