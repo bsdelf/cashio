@@ -46,6 +46,7 @@ public:
     void InsertRow(const Row& item);
     void DropRow(const string& date);
     void UpdateRow(const string& date, const Row& row);
+    void QueryAllRows(DateVector& range);
     void QueryRows(const string& query, DateVector& range);
     void GetRows(const DateVector& range, RowVector &rows);
     bool HasRow(const string& date);

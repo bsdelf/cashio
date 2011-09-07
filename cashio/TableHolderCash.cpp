@@ -44,13 +44,21 @@ void TableHolderCash::setupTable(QTableView *table)
     list << tr("Date") << tr("IO") << tr("Amount") << tr("Tags") << tr("Note");
     mModel.setHorizontalHeaderLabels(list);
 
-    QList<QStandardItem*> rowList;
-    rowList << new QStandardItem(QString::fromStdString(mCashDb.GetTime()));
-    rowList << new QStandardItem("Out");
-    rowList << new QStandardItem("100");
-    rowList << new QStandardItem("tag");
-    rowList << new QStandardItem("");
-    mModel.insertRow(0, rowList);
+    DateVector range;
+    mCashDb.QueryAllRows(range);
+    mCashDb.GetRows(range, mRowVector);
+    cout << mRowVector.size() << endl;
+    for (size_t i = 0; i < mRowVector.size(); ++i)
+    {
+        Row* row = mRowVector[i];
+        QList<QStandardItem*> rowList;
+        rowList << new QStandardItem(QString::fromStdString(row->date));
+        rowList << new QStandardItem(QString::fromUtf8(row->io.c_str()));
+        rowList << new QStandardItem(QString::number(row->amount));
+        rowList << new QStandardItem(""); // no tag now
+        rowList << new QStandardItem(QString::fromUtf8(row->note.c_str()));
+        mModel.insertRow(0, rowList);
+    }
 
     mPtrTable->setModel(&mModel);
     mPtrTable->resizeColumnsToContents();
@@ -152,6 +160,8 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     {
         if (mHasNewRecord)
             syncNewRecord();
+        else
+            updateRecord(index);
     }
     // resize
     mPtrTable->resizeColumnsToContents();
@@ -199,4 +209,27 @@ void TableHolderCash::syncNewRecord()
 
     mCashDb.InsertRow(row);
     mHasNewRecord = false;
+}
+
+void TableHolderCash::updateRecord(const QModelIndex &index)
+{
+    Row row;
+    row.date = mModel.data(mModel.index(index.row(), ColumnDate)).toString().toStdString();
+    row.io = mModel.data(mModel.index(index.row(), ColumnIO)).toString().toUtf8().data();
+    row.amount = mModel.data(mModel.index(index.row(), ColumnAmount)).toDouble();
+    QStringList tags = mModel.data(mModel.index(index.row(), ColumnTag)).toString().split(QRegExp("\\s+"));
+    row.tags.resize(tags.size());
+    for(int i = 0; i< row.tags.size(); ++i)
+    {
+        row.tags[i] = tags[i].toStdString();
+        cout << "tag" << i << ":" << row.tags[i] << endl;
+    }
+    row.note = mModel.data(mModel.index(index.row(), ColumnNote)).toString().toUtf8().data();
+
+    cout << "date:" << row.date << endl;
+    cout << "io:" << row.io << endl;
+    cout << "amout:" << row.amount << endl;
+    cout << "note:" << row.note << endl;
+
+    mCashDb.UpdateRow(row.date, row);
 }

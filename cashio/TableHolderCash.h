@@ -39,6 +39,7 @@ public:
 private:
     bool hasInvaildCell();
     void syncNewRecord();
+    void updateRecord(const QModelIndex& index);
 
 signals:
 

@@ -3,7 +3,7 @@
 using namespace std;
 #include "DbDef.h"
 
-const int SQL_BUF_SIZE = 500;
+const int SQL_BUF_SIZE = 1024;
 
 CashDb::CashDb()
 {
@@ -78,14 +78,19 @@ void CashDb::GetTags(TagVector &tags)
 
 bool CashDb::HasTag(const string &tagName)
 {
-    FORMAT_SQL(SQL_QUERY_HAS_TAG, tagName.c_str());
+    FORMAT_SQL(SQL_QUERY_TAGS_HAS_TAG, tagName.c_str());
     Prepare();
     return (NextStep() == StepRow) ? true : false;
 }
 
-void CashDb::InsertRow(const Row &item)
+void CashDb::InsertRow(const Row &row)
 {
-
+    FORMAT_SQL(SQL_INSERT_ACCOUNT,
+               row.date.c_str(),
+               row.io.c_str(),
+               row.amount,
+               row.note.c_str());
+    ExecSql();
 }
 
 void CashDb::DropRow(const string &date)
@@ -95,26 +100,56 @@ void CashDb::DropRow(const string &date)
 
 void CashDb::UpdateRow(const string &date, const Row &row)
 {
+    FORMAT_SQL(SQL_UPDATE_ACCOUNT,
+               row.io.c_str(),
+               row.amount,
+               row.note.c_str(),
+               date.c_str());
+    ExecSql();
+}
 
+void CashDb::QueryAllRows(DateVector& range)
+{
+    QueryRows(SQL_QUERY_ACOUNT_ALL_DATE, range);
 }
 
 void CashDb::QueryRows(const string& query, DateVector& range)
 {
-
+    range.clear();
+    FORMAT_SQL(query.c_str());
+    Prepare();
+    while (NextStep() == StepRow)
+    {
+        range.push_back(ColumnString(0));
+    }
 }
 
 void CashDb::GetRows(const DateVector& range, RowVector &rows)
 {
+    for (size_t i = 0; i < rows.size(); ++i)
+    {
+        delete rows[i];
+    }
     rows.clear();
+
     for (size_t i = 0; i < range.size(); ++i)
     {
-
+        FORMAT_SQL(SQL_QUERY_ACCOUNT_ROW, range[i].c_str());
+        Prepare();
+        if (NextStep() != StepRow)
+            return;
+        Row* row = new Row;
+        row->date = ColumnString(0);
+        row->io = ColumnString(1);
+        row->amount = ColumnDouble(2);
+        row->note = ColumnString(3);
+        rows.push_back(row);
     }
 }
 
 bool CashDb::HasRow(const string &date)
 {
-    FORMAT_SQL(SQL_QUERY_HAS_ACCOUNT, date.c_str());
+    FORMAT_SQL(SQL_QUERY_ACCOUNT_HAS_DATE, date.c_str());
     Prepare();
     return (NextStep() == StepRow) ? true : false;
 }

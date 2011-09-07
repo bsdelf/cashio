@@ -85,6 +85,21 @@ protected:
         return string((const char*)sqlite3_column_text(mStmt, col));
     }
 
+    int ColumnInt(int col)
+    {
+        return sqlite3_column_int(mStmt, col);
+    }
+
+    sqlite3_int64 ColumnInt64(int col)
+    {
+        return sqlite3_column_int64(mStmt, col);
+    }
+
+    double ColumnDouble(int col)
+    {
+        return sqlite3_column_double(mStmt, col);
+    }
+
 protected:
     string mDbName;
     char* mSqlBuf;
