@@ -4,7 +4,8 @@
 #include <QtCore>
 #include <QtGui>
 #include "CashDb.h"
-#include "ComboBoxDelegate.h"
+#include "QComboBoxDelegate.hpp"
+#include "QColorfulCellDelegate.hpp"
 
 class TableHolderCash : public QObject
 {
@@ -35,7 +36,10 @@ private:
     QTableView* mPtrTable;
     QStandardItemModel mModel;
     CashDb mCashDb;
-    ComboBoxDelegate mCombDelegateInOut;
+
+    sqt::QComboBoxDelegate mCombDelegateInOut;
+    sqt::QColorfulCellDelegate mColorfulCellDelegate;
+
     bool mHasNewRow;
 };
 

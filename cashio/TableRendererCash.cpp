@@ -10,6 +10,7 @@ TableHolderCash::TableHolderCash(QObject *parent) :
 
     mCombDelegateInOut.addText("In");
     mCombDelegateInOut.addText("Out");
+
 }
 
 TableHolderCash::~TableHolderCash()
@@ -55,6 +56,12 @@ void TableHolderCash::setupTable(QTableView *table)
     QModelIndex index = mModel.index(0, 0);
     mPtrTable->setCurrentIndex(index);
     mPtrTable->edit(index);
+
+    mPtrTable->setItemDelegateForColumn(0, &mColorfulCellDelegate);
+    mPtrTable->setItemDelegateForColumn(2, &mColorfulCellDelegate);
+
+    //mColorfulCellDelegate.insertIndex(index);
+    mColorfulCellDelegate.setCellColor(QColor(255, 48, 48));
 
     connect(&mModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(slotModelDataChanged(QStandardItem*)));
 
@@ -116,6 +123,27 @@ bool TableHolderCash::rmSelectedRows()
 
 void TableHolderCash::slotModelDataChanged(QStandardItem * item)
 {
+    // check whether the cell is vaild
+    QModelIndex index = item->index();
+    bool vaild = true;
+    QString value = mModel.data(index).toString();
+
+    switch (index.column())
+    {
+    case 0:
+        vaild = QDateTime::fromString(value, "yyyy-MM-dd HH:mm:ss.zzz").isValid();
+        break;
+
+    case 2:
+        value.toDouble(&vaild);
+        break;
+    }
+
+    if (vaild)
+        mColorfulCellDelegate.removeIndex(index);
+    else
+        mColorfulCellDelegate.insertIndex(index);
+
     mPtrTable->resizeColumnsToContents();
     mPtrTable->horizontalHeader()->setStretchLastSection(true);
     cout << "r:" << item->row() << " c:" << item->column() << endl;
