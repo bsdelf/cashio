@@ -1,21 +1,31 @@
 #ifndef CashDb_H
 #define CashDb_H
 
+#include <set>
+#include <map>
 #include <vector>
 #include <string>
 using namespace std;
 #include "SqliteBase.h"
 
-struct AccountItem
+struct Tag
+{
+    string name;
+    int color;
+};
+
+struct Row
 {
     string date;
     int inout;
     double amount;
     vector<string> tags;
+    string note;
 };
 
-typedef vector<string> TagVector;
-typedef vector<AccountItem> AccountVector;
+typedef vector<Tag> TagVector;
+typedef vector<Row*> RowVector;
+typedef vector<string> DateVector;
 
 class CashDb: public SqliteBase
 {
@@ -29,15 +39,16 @@ public:
     void InitDb();
     void ClearDb();
 
-    void InsertTag(const string& tag);
-    void DropTag(const string& tag);
-    void UpdateTag(const string& oldTag, const string& newTag);
+    void InsertTag(const Tag& tag);
+    void DropTag(const string& tagName);
+    void UpdateTag(const string& tagName, const Tag& newTag);
     void GetTags(TagVector& tags);
 
-    void InsertAccountItem(const AccountItem& item);
-    void DropAccountItem(const string& date);
-    void UpdateAccountItem(const string& date, const AccountItem& item);
-    void GetAccountItems(AccountVector& items);
+    void InsertRow(const Row& item);
+    void DropRow(const string& date);
+    void UpdateRow(const string& date, const Row& row);
+    void QueryRows(const string& query, DateVector& range);
+    void GetRows(const DateVector& range, RowVector &rows);
 
     string GetTime();
 };

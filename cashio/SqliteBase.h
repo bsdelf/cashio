@@ -12,6 +12,15 @@ using namespace std;
 
 #define FORMAT_SQL(...) snprintf(mSqlBuf, SQL_BUF_SIZE, __VA_ARGS__)
 
+enum StepStatus
+{
+    StepBusy = SQLITE_BUSY,
+    StepDone = SQLITE_DONE,
+    StepError = SQLITE_ERROR,
+    StepMisuse = SQLITE_MISUSE,
+    StepRow = SQLITE_ROW,
+};
+
 class SqliteBase
 {
 public:
@@ -19,13 +28,17 @@ public:
         mDbName(""),
         mSqlBuf(NULL),
         mSqlBufLen(0),
-        mDbHandle(NULL),
-        mDbStmt(NULL)
+        mDbConn(NULL),
+        mStmt(NULL)
     {
     }
 
     ~SqliteBase()
     {
+        if (mStmt != NULL)
+        {
+            sqlite3_finalize(mStmt);
+        }
     }
 
 protected:
@@ -43,15 +56,35 @@ protected:
 
     void ExecSql(const string &sql)
     {
-        sqlite3_exec(mDbHandle, sql.c_str(), NULL, 0, 0);
+        sqlite3_exec(mDbConn, sql.c_str(), NULL, 0, 0);
+    }
+
+    void Prepare(const string &sql)
+    {
+        sqlite3_prepare_v2(mDbConn, sql.c_str(), -1, &mStmt, 0);
+    }
+
+    StepStatus Step()
+    {
+        return (StepStatus)sqlite3_step(mStmt);
+    }
+
+    int ColumnBytes(int col)
+    {
+        return sqlite3_column_bytes(mStmt, col);
+    }
+
+    string ColumnString(int col)
+    {
+        return string((const char*)sqlite3_column_text(mStmt, col));
     }
 
 protected:
     string mDbName;
     char* mSqlBuf;
     size_t mSqlBufLen;
-    sqlite3* mDbHandle;
-    sqlite3_stmt* mDbStmt;
+    sqlite3* mDbConn;
+    sqlite3_stmt* mStmt;
 };
 
 #endif // SQLITEHELPER_H

@@ -43,7 +43,7 @@ void TableHolderCash::setupTable(QTableView *table)
     mModel.setHorizontalHeaderLabels(list);
 
     QList<QStandardItem*> rowList;
-    rowList << new QStandardItem("");
+    rowList << new QStandardItem(QString::fromStdString(mCashDb.GetTime()));
     rowList << new QStandardItem("Out");
     rowList << new QStandardItem("100");
     rowList << new QStandardItem("tag");
@@ -68,7 +68,7 @@ void TableHolderCash::unsetupTable()
 void TableHolderCash::prepareNewRow()
 {
     QList<QStandardItem*> row;
-    row << new QStandardItem(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz"));
+    row << new QStandardItem(QString::fromStdString(mCashDb.GetTime()));
     row << new QStandardItem("Out");
     row << new QStandardItem();
     row << new QStandardItem();
