@@ -80,7 +80,7 @@ bool CashDb::HasTag(const string &tagName)
 {
     FORMAT_SQL(SQL_QUERY_HAS_TAG, tagName.c_str());
     Prepare();
-    return (Step() == StepRow) ? true : false;
+    return (NextStep() == StepRow) ? true : false;
 }
 
 void CashDb::InsertRow(const Row &item)
@@ -116,11 +116,11 @@ bool CashDb::HasRow(const string &date)
 {
     FORMAT_SQL(SQL_QUERY_HAS_ACCOUNT, date.c_str());
     Prepare();
-    return (Step() == StepRow) ? true : false;
+    return (NextStep() == StepRow) ? true : false;
 }
 
 string CashDb::GetTime()
 {
     Prepare(SQL_QUERY_DATE);
-    return (Step() == StepRow) ? ColumnString(0) : "";
+    return (NextStep() == StepRow) ? ColumnString(0) : "";
 }

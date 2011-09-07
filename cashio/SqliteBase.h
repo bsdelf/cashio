@@ -70,7 +70,7 @@ protected:
         sqlite3_prepare_v2(mDbConn, sql.c_str(), -1, &mStmt, 0);
     }
 
-    StepStatus Step()
+    StepStatus NextStep()
     {
         return (StepStatus)sqlite3_step(mStmt);
     }
