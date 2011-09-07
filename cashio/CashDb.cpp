@@ -37,14 +37,11 @@ void CashDb::CloseDb()
 void CashDb::InitDb()
 {
     // tags table
-    FORMAT_SQL(SQL_CREATE_TABLE_TAGS, TABLE_TAGS);
-    ExecSql();
+    ExecSql(SQL_CREATE_TABLE_TAGS);
     // account table
-    FORMAT_SQL(SQL_CREATE_TABLE_ACCOUNT, TABLE_ACCOUNT);
-    ExecSql();
+    ExecSql(SQL_CREATE_TABLE_ACCOUNT);
     // account-tag table
-    FORMAT_SQL(SQL_CREATE_TABLE_ACCOUNT_TAG, TABLE_ACCOUNT_TAG);
-    ExecSql();
+    ExecSql(SQL_CREATE_TABLE_ACCOUNT_TAG);
 }
 
 void CashDb::ClearDb()

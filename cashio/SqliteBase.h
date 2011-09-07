@@ -47,6 +47,7 @@ protected:
         ExecSql("PRAGMA journal_mode=off;");
         ExecSql("PRAGMA synchronous=off;");
         ExecSql("PRAGMA cache_size=8000;");
+        ExecSql("PRAGMA foreign_keys = ON;");
     }
 
     void ExecSql()
