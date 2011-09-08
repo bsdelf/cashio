@@ -60,7 +60,7 @@ private:
     bool mHasInvaildCell;
 
     TagVector mTagVector;
-    RowVector mRowVector;
+    RowPtrVector mRowPtrVector;
 };
 
 #endif // TableHolderCash_H

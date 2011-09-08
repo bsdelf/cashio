@@ -22,7 +22,7 @@ struct Row
 };
 
 typedef vector<Tag> TagVector;
-typedef vector<Row*> RowVector;
+typedef vector<Row*> RowPtrVector;
 typedef vector<string> DateVector;
 
 class CashDb: public SqliteBase
@@ -43,12 +43,12 @@ public:
     void GetTags(TagVector& tags);
     bool HasTag(const string& tagName);
 
-    void InsertRow(const Row& item);
+    void InsertRow(const Row* item);
     void DropRow(const string& date);
     void UpdateRow(const string& date, const Row& row);
     void QueryAllRows(DateVector& range);
     void QueryRows(const string& query, DateVector& range);
-    void GetRows(const DateVector& range, RowVector &rows);
+    void GetRows(const DateVector& range, RowPtrVector &rows);
     bool HasRow(const string& date);
 
     string GetTime();

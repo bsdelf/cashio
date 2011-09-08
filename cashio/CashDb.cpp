@@ -84,24 +84,24 @@ bool CashDb::HasTag(const string &tagName)
     return (NextStep() == StepRow) ? true : false;
 }
 
-void CashDb::InsertRow(const Row &row)
+void CashDb::InsertRow(const Row* row)
 {    
     // insert into account
     FORMAT_SQL(SQL_INSERT_ACCOUNT,
-               row.date.c_str(),
-               row.io.c_str(),
-               row.amount,
-               row.note.c_str());
+               row->date.c_str(),
+               row->io.c_str(),
+               row->amount,
+               row->note.c_str());
     ExecSql();
 
     // complete tags and relationships
-    for (size_t i = 0; i < row.tags.size(); ++i)
+    for (size_t i = 0; i < row->tags.size(); ++i)
     {
-        Tag tag = row.tags[i];
+        Tag tag = row->tags[i];
         if (!HasTag(tag.name))
             InsertTag(tag);
 
-        FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, row.date.c_str(), tag.name.c_str());
+        FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, row->date.c_str(), tag.name.c_str());
         ExecSql();
     }
 }
@@ -154,7 +154,7 @@ void CashDb::QueryRows(const string& query, DateVector& range)
     }
 }
 
-void CashDb::GetRows(const DateVector& range, RowVector &rows)
+void CashDb::GetRows(const DateVector& range, RowPtrVector &rows)
 {
     for (size_t i = 0; i < rows.size(); ++i)
     {

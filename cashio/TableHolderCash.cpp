@@ -52,12 +52,12 @@ void TableHolderCash::setupTable(QTableView *table)
     // load table
     DateVector range;
     mCashDb.QueryAllRows(range);
-    mCashDb.GetRows(range, mRowVector);
-    qDebug() << mRowVector.size() << endl;
+    mCashDb.GetRows(range, mRowPtrVector);
+    qDebug() << mRowPtrVector.size() << endl;
     mModel.removeRows(0, mModel.rowCount());
-    for (size_t i = 0; i < mRowVector.size(); ++i)
+    for (size_t i = 0; i < mRowPtrVector.size(); ++i)
     {
-        Row* row = mRowVector[i];
+        Row* row = mRowPtrVector[i];
         QList<QStandardItem*> rowList;
         rowList << new QStandardItem(QString::fromStdString(row->date));
         rowList << new QStandardItem(QString::fromUtf8(row->io.c_str()));
@@ -211,25 +211,26 @@ void TableHolderCash::syncNewRecord()
         return;
     qDebug() << "sync" << endl;
 
-    Row row;
-    row.date = mModel.data(mModel.index(0, ColumnDate)).toString().toStdString();
-    row.io = mModel.data(mModel.index(0, ColumnIO)).toString().toStdString();
-    row.amount = mModel.data(mModel.index(0, ColumnAmount)).toDouble();
+    Row* row = new Row;
+    row->date = mModel.data(mModel.index(0, ColumnDate)).toString().toStdString();
+    row->io = mModel.data(mModel.index(0, ColumnIO)).toString().toStdString();
+    row->amount = mModel.data(mModel.index(0, ColumnAmount)).toDouble();
     QStringList tags = mModel.data(mModel.index(0, ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
-    row.tags.resize(tags.size());
-    for(size_t i = 0; i< row.tags.size(); ++i)
+    row->tags.resize(tags.size());
+    for(size_t i = 0; i< row->tags.size(); ++i)
     {
-        row.tags[i].name = tags[i].toUtf8().data();
-        row.tags[i].color = Qt::red;
-        qDebug() << "tag" << i << ":" << row.tags[i].name.c_str() << endl;
+        row->tags[i].name = tags[i].toUtf8().data();
+        row->tags[i].color = Qt::red;
+        qDebug() << "tag" << i << ":" << row->tags[i].name.c_str() << endl;
     }
-    row.note = mModel.data(mModel.index(0, ColumnNote)).toString().toStdString();
+    row->note = mModel.data(mModel.index(0, ColumnNote)).toString().toStdString();
 
-    qDebug() << "date:" << row.date.c_str() << endl;
-    qDebug() << "io:" << QString::fromUtf8(row.io.c_str()) << endl;
-    qDebug() << "amout:" << row.amount << endl;
-    qDebug() << "note:" << QString::fromUtf8(row.note.c_str()) << endl;
+    qDebug() << "date:" << row->date.c_str() << endl;
+    qDebug() << "io:" << QString::fromUtf8(row->io.c_str()) << endl;
+    qDebug() << "amout:" << row->amount << endl;
+    qDebug() << "note:" << QString::fromUtf8(row->note.c_str()) << endl;
 
+    mRowPtrVector.insert(mRowPtrVector.begin(), row);
     mCashDb.InsertRow(row);
     mHasNewRecord = false;
 }
@@ -252,7 +253,7 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     }
     newRow.note = mModel.data(mModel.index(index.row(), ColumnNote)).toString().toUtf8().data();
 
-    Row& oldRow = *mRowVector[index.row()];
+    Row& oldRow = *mRowPtrVector[index.row()];
 
     qDebug() << "old date:" << oldRow.date.c_str() << endl;
     qDebug() << "new date:" << newRow.date.c_str() << endl;
