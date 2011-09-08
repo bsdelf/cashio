@@ -129,6 +129,8 @@ void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tag
     ExecSql();
 
     // complete tags and relationships
+    FORMAT_SQL(SQL_BEGIN);
+    ExecSql();
     for (size_t i = 0; i < row.tags.size(); ++i)
     {
         Tag tag = row.tags[i];
@@ -138,6 +140,8 @@ void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tag
         FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, tagUuids[i].c_str(), uuid.c_str(), tag.name.c_str());
         ExecSql();
     }
+    FORMAT_SQL(SQL_COMMIT);
+    ExecSql();
 }
 
 void CashDb::QueryAllRows(UuidVector& range)
