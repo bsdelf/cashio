@@ -258,18 +258,22 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
 {
     qDebug() << "update" << endl;
 
-    Row newRow;
-    newRow.date = mModel.data(mModel.index(index.row(), ColumnDate)).toString().toStdString();
-    newRow.io = mModel.data(mModel.index(index.row(), ColumnIO)).toString().toUtf8().data();
-    newRow.amount = mModel.data(mModel.index(index.row(), ColumnAmount)).toDouble();
-    newRow.note = mModel.data(mModel.index(index.row(), ColumnNote)).toString().toUtf8().data();
+    const int row = index.row();
 
+    // pick new row data in table view
+    Row newRow;
+    newRow.date = mModel.data(mModel.index(row, ColumnDate)).toString().toStdString();
+    newRow.io = mModel.data(mModel.index(row, ColumnIO)).toString().toUtf8().data();
+    newRow.amount = mModel.data(mModel.index(row, ColumnAmount)).toDouble();
+    newRow.note = mModel.data(mModel.index(row, ColumnNote)).toString().toUtf8().data();
+
+    // special handle for tags
     UuidVector tagUuids;
-    QStringList tagNames = mModel.data(mModel.index(index.row(), ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    QStringList tagNames = mModel.data(mModel.index(row, ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
     newRow.tags.resize(tagNames.size());
     tagUuids.resize(tagNames.size());
     // NOTE: Under Windows the rand() is not as random as Unix,
-    // so we split color into r/g/b, instead of an single random integer.
+    // so we split color into r/g/b, instead of an single random integer[0, 2^31).
     srand(time(NULL));
     for (size_t i = 0; i< newRow.tags.size(); ++i)
     {
@@ -280,16 +284,25 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
         qDebug() << "color:" << newRow.tags[i].color;
     }
 
-    Row& oldRow = *mRowPtrVector[index.row()];
-
-    qDebug() << "old date:" << oldRow.date.c_str() << endl;
-    qDebug() << "new date:" << newRow.date.c_str() << endl;
+    // write to database together with out "cache"
+    qDebug() << "date:" << newRow.date.c_str() << endl;
     qDebug() << "io:" << QString::fromUtf8(newRow.io.c_str()) << endl;
     qDebug() << "amout:" << newRow.amount << endl;
     qDebug() << "tag count:" << tagNames.size();
     qDebug() << "note:" << QString::fromUtf8(newRow.note.c_str()) << endl;
 
-    string uuid = mUuidRange[index.row()];
+    string uuid = mUuidRange[row];
     mCashDb.UpdateRow(uuid, newRow, tagUuids);
-    oldRow = newRow;
+    *mRowPtrVector[row] = newRow;
+    mTagCellDelegate.updateRowTag(row, tagNames);
+
+    TagVector tags;
+    mCashDb.GetTags(tags);
+    mTagCellDelegate.clearTagColor();
+    mTagCellDelegate.reserveTagColor(tags.size());
+    for (size_t i = 0; i < tags.size(); ++i)
+    {
+        mTagCellDelegate.insertTagColorPair(
+          QString::fromStdString(tags[i].name), tags[i].color);
+    }
 }

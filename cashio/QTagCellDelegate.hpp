@@ -53,6 +53,11 @@ public:
         mTagColors.reserve(size);
     }
 
+    void clearTagColor()
+    {
+        mTagColors.clear();
+    }
+
     // for record all row tags
     void insertRowTag(int pos, const QStringList& list)
     {

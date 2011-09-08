@@ -124,7 +124,7 @@ void CashDb::DeleteRow(const string &uuid)
 void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tagUuids)
 {
     // clear all old tags
-    FORMAT_SQL(SQL_DELETE_ACCOUNT_TAG, uuid.c_str());
+    FORMAT_SQL(SQL_DELETE_ACCOUNT_TAGS, uuid.c_str());
     ExecSql();
 
     // update account
@@ -187,7 +187,7 @@ void CashDb::GetRows(const UuidVector& range, RowPtrVector &rows)
         row->amount = ColumnDouble(2);
         row->note = ColumnString(3);
 
-        FORMAT_SQL(SQL_QUERY_ACCOUNT_TAG, range[i].c_str());
+        FORMAT_SQL(SQL_QUERY_ACCOUNT_TAGS, range[i].c_str());
         Prepare();
         row->tags.clear();
         while (NextStep() == StepRow)

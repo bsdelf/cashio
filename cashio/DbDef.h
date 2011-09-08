@@ -73,9 +73,9 @@ const char SQL_CREATE_TABLE_ACCOUNT_TAG[] =
     "  on delete cascade on update cascade );";
 const char SQL_INSERT_ACCOUNT_TAG[] =
     "insert into cashio_account_tag values('%s', '%s', '%s');";
-const char SQL_DELETE_ACCOUNT_TAG[] =
+const char SQL_DELETE_ACCOUNT_TAGS[] =
     "delete from cashio_account_tag where AccountUuid='%s';";
-const char SQL_QUERY_ACCOUNT_TAG[] =
+const char SQL_QUERY_ACCOUNT_TAGS[] =
     "select Tag, Color from cashio_tags where Tag in ("
     "  select Tag from cashio_account_tag where AccountUuid='%s');";
 
