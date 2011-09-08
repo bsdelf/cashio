@@ -75,6 +75,14 @@ void CashDb::UpdateTag(const string &tagName, const Tag &newTag)
 void CashDb::GetTags(TagVector &tags)
 {
     tags.clear();
+    COPY_SQL(SQL_QUERY_TAGS_ALL);
+    Prepare();
+    while (NextStep() == StepRow)
+    {
+        Tag tag(ColumnString(0),
+                ColumnInt(1));
+        tags.push_back(tag);
+    }
 }
 
 bool CashDb::HasTag(const string &tagName)

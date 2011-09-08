@@ -41,26 +41,34 @@ void TableHolderCash::setupTable(QTableView *table)
     mPtrTable->setAlternatingRowColors(true);
 
     // setup head
-    QStringList  list;
+    QStringList list;
     list << tr("Date") << tr("IO") << tr("Amount") << tr("Tags") << tr("Note");
     mModel.setHorizontalHeaderLabels(list);
     mPtrTable->setItemDelegateForColumn(ColumnDate, &mVaildCellDelegate);
     mPtrTable->setItemDelegateForColumn(ColumnIO, &mCombDelegateInOut);
     mPtrTable->setItemDelegateForColumn(ColumnAmount, &mVaildCellDelegate);
     mPtrTable->setItemDelegateForColumn(ColumnTag, &mTagCellDelegate);
+
+    // setup TagCellDelegate
+    TagVector tags;
+    mCashDb.GetTags(tags);
     mTagCellDelegate.setTagFont(mPtrTable->font());
     mTagCellDelegate.setTagSpace(10);
-    mTagCellDelegate.setRowTags(&mRowTagVector);
+    mTagCellDelegate.reserveTagColor(tags.size());
+    for (size_t i = 0; i < tags.size(); ++i)
+    {
+        mTagCellDelegate.insertTagColorPair(
+          QString::fromStdString(tags[i].name), tags[i].color);
+    }
 
     // load table
     mCashDb.QueryAllRows(mUuidRange);
     mCashDb.GetRows(mUuidRange, mRowPtrVector);
-    mModel.removeRows(0, mModel.rowCount());
-    mRowTagVector.clear();
-    mRowTagVector.reserve(mRowPtrVector.size());
-
     qDebug() << "table rows:" << mRowPtrVector.size() << endl;
 
+    mModel.removeRows(0, mModel.rowCount());
+    mTagCellDelegate.clearRowTagPtrs();
+    mTagCellDelegate.reserveRowTagPtrs(mRowPtrVector.size());
     for (size_t i = 0; i < mRowPtrVector.size(); ++i)
     {
         Row* row = mRowPtrVector[i];
@@ -68,21 +76,19 @@ void TableHolderCash::setupTable(QTableView *table)
         rowList << new QStandardItem(QString::fromStdString(row->date));
         rowList << new QStandardItem(QString::fromUtf8(row->io.c_str()));
         rowList << new QStandardItem(QString::number(row->amount, 'f', 2));
-        qDebug() << "tag count:" << row->tags.size() << endl;
         QString tagNames;
-        sqt::TagSliceVector rowTag;
+        QStringList tagNameList;
         for (size_t i = 0; i < row->tags.size(); ++i)
         {
             QString tagName = QString::fromUtf8(row->tags[i].name.c_str());
             tagNames += tagName + " ";
-            rowTag.push_back(sqt::TagSlice(tagName, row->tags[i].color));
+            tagNameList << tagName;
         }
         rowList << new QStandardItem(tagNames);
         rowList << new QStandardItem(QString::fromUtf8(row->note.c_str()));
         mModel.appendRow(rowList);
-        mRowTagVector.append(rowTag);
+        mTagCellDelegate.appendRowTag(tagNameList);
     }
-    mTagCellDelegate.measureHint();
     mPtrTable->setModel(&mModel);
 
     // adjust head

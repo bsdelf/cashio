@@ -33,10 +33,12 @@ const char SQL_INSERT_TAG[] =
     "insert into cashio_tags values('%s', %d);";
 const char SQL_UPDATE_TAG[] =
     "update cashio_tags set Tag='%s', Color=%d;";
-const char SQL_DROP_TAG[] =
+const char SQL_DELETE_TAG[] =
     "delete from cashio_tags where Tag='%s';";
 const char SQL_QUERY_TAGS_HAS_TAG[] =
     "select Tag from cashio_tags where Tag='%s';";
+const char SQL_QUERY_TAGS_ALL[] =
+    "select Tag,Color from cashio_tags;";
 
 /* based on cashio_account */
 const char SQL_CREATE_TABLE_ACCOUNT[] =
@@ -63,18 +65,18 @@ const char SQL_QUERY_ACCOUNT_ROW[] =
 const char SQL_CREATE_TABLE_ACCOUNT_TAG[] =
     "create table if not exists cashio_account_tag ("
     "Uuid text primary key,"
-    "AccountUuId text not null,"
+    "AccountUuid text not null,"
     "Tag varchar(255) not null,"
-    "foreign key(AccountUuId) references cashio_account(Uuid)"
-    "   on delete cascade on update cascade,"
+    "foreign key(AccountUuid) references cashio_account(Uuid)"
+    "  on delete cascade on update cascade,"
     "foreign key(Tag) references cashio_tags(Tag)"
-    "   on delete cascade on update cascade );";
+    "  on delete cascade on update cascade );";
 const char SQL_INSERT_ACCOUNT_TAG[] =
     "insert into cashio_account_tag values('%s', '%s', '%s');";
 const char SQL_DELETE_ACCOUNT_TAG[] =
-    "delete from cashio_account_tag where AccountUuId='%s';";
+    "delete from cashio_account_tag where AccountUuid='%s';";
 const char SQL_QUERY_ACCOUNT_TAG[] =
     "select Tag, Color from cashio_tags where Tag in ("
-    "   select Tag from cashio_account_tag where AccountUuId='%s');";
+    "  select Tag from cashio_account_tag where AccountUuid='%s');";
 
 #endif // DBDEF_H

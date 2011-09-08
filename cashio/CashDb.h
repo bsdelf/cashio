@@ -10,6 +10,14 @@ struct Tag
 {
     string name;
     int color;
+
+    Tag() {}
+
+    Tag(const string& n, const int& c):
+        name(n),
+        color(c)
+    {
+    }
 };
 
 struct Row

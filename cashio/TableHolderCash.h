@@ -55,7 +55,6 @@ private:
     sqt::QComboBoxDelegate mCombDelegateInOut;
     sqt::QBaseCellDelegate mVaildCellDelegate;
     sqt::QTagCellDelegate mTagCellDelegate;
-    sqt::RowTagVector mRowTagVector;
 
     bool mHasNewRecord;
     bool mHasInvaildCell;
