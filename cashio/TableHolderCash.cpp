@@ -240,8 +240,10 @@ void TableHolderCash::syncNewRecord()
     qDebug() << "amout:" << row->amount << endl;
     qDebug() << "note:" << QString::fromUtf8(row->note.c_str()) << endl;
 
+    string uuid = QUuid::createUuid().toString().toStdString();
+    mUuidRange.insert(mUuidRange.begin(), uuid);
     mRowPtrVector.insert(mRowPtrVector.begin(), row);
-    mCashDb.InsertRow(QUuid::createUuid().toString().toStdString(), row);
+    mCashDb.InsertRow(uuid, row);
     mHasNewRecord = false;
 }
 
@@ -253,19 +255,21 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     newRow.date = mModel.data(mModel.index(index.row(), ColumnDate)).toString().toStdString();
     newRow.io = mModel.data(mModel.index(index.row(), ColumnIO)).toString().toUtf8().data();
     newRow.amount = mModel.data(mModel.index(index.row(), ColumnAmount)).toDouble();
+    newRow.note = mModel.data(mModel.index(index.row(), ColumnNote)).toString().toUtf8().data();
 
     UuidVector tagUuids;
     QStringList tagNames = mModel.data(mModel.index(index.row(), ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
     newRow.tags.resize(tagNames.size());
     tagUuids.resize(tagNames.size());
+    srand(time(NULL));
     for(size_t i = 0; i< newRow.tags.size(); ++i)
     {
         newRow.tags[i].name = tagNames[i].toUtf8().data();
-        newRow.tags[i].color = Qt::red;
+        newRow.tags[i].color = rand() % (16777215+1);
         tagUuids[i] = QUuid::createUuid().toString().toStdString();
         qDebug() << "tag" << i << ":" << newRow.tags[i].name.c_str() << endl;
+        qDebug() << "color:" << newRow.tags[i].color;
     }
-    newRow.note = mModel.data(mModel.index(index.row(), ColumnNote)).toString().toUtf8().data();
 
     Row& oldRow = *mRowPtrVector[index.row()];
 
