@@ -61,6 +61,7 @@ private:
     bool mHasInvaildCell;
 
     TagVector mTagVector;
+    UuidVector mUuidRange;
     RowPtrVector mRowPtrVector;
 };
 

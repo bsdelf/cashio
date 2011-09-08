@@ -2,6 +2,7 @@
 #define SQLITEHELPER_H
 
 #include <string>
+#include <iostream>
 using namespace std;
 #include <sqlite3.h>
 
@@ -57,6 +58,7 @@ protected:
 
     void ExecSql(const string &sql)
     {
+        cout << sql << endl;
         sqlite3_exec(mDbConn, sql.c_str(), NULL, 0, 0);
     }
 

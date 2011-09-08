@@ -84,10 +84,11 @@ bool CashDb::HasTag(const string &tagName)
     return (NextStep() == StepRow) ? true : false;
 }
 
-void CashDb::InsertRow(const Row* row)
+void CashDb::InsertRow(const string& uuid, const Row* row)
 {    
     // insert into account
     FORMAT_SQL(SQL_INSERT_ACCOUNT,
+               uuid.c_str(),
                row->date.c_str(),
                row->io.c_str(),
                row->amount,
@@ -106,15 +107,16 @@ void CashDb::InsertRow(const Row* row)
     }
 }
 
-void CashDb::DropRow(const string &date)
+void CashDb::DeleteRow(const string &uuid)
 {
-
+    FORMAT_SQL(SQL_DELETE_ACCOUNT, uuid.c_str());
+    ExecSql();
 }
 
-void CashDb::UpdateRow(const string &oldDate, const Row &row)
+void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tagUuids)
 {
     // clear all old tags
-    FORMAT_SQL(SQL_DELETE_ACCOUNT_TAG, oldDate.c_str());
+    FORMAT_SQL(SQL_DELETE_ACCOUNT_TAG, uuid.c_str());
     ExecSql();
 
     // update account
@@ -123,7 +125,7 @@ void CashDb::UpdateRow(const string &oldDate, const Row &row)
                row.io.c_str(),
                row.amount,
                row.note.c_str(),
-               oldDate.c_str());
+               uuid.c_str());
     ExecSql();
 
     // complete tags and relationships
@@ -133,17 +135,17 @@ void CashDb::UpdateRow(const string &oldDate, const Row &row)
         if (!HasTag(tag.name))
             InsertTag(tag);
 
-        FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, row.date.c_str(), tag.name.c_str());
+        FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, tagUuids[i].c_str(), uuid.c_str(), tag.name.c_str());
         ExecSql();
     }
 }
 
-void CashDb::QueryAllRows(DateVector& range)
+void CashDb::QueryAllRows(UuidVector& range)
 {
     QueryRows(SQL_QUERY_ACOUNT_ALL_DATE, range);
 }
 
-void CashDb::QueryRows(const string& query, DateVector& range)
+void CashDb::QueryRows(const string& query, UuidVector& range)
 {
     range.clear();
     FORMAT_SQL(query.c_str());
@@ -154,7 +156,7 @@ void CashDb::QueryRows(const string& query, DateVector& range)
     }
 }
 
-void CashDb::GetRows(const DateVector& range, RowPtrVector &rows)
+void CashDb::GetRows(const UuidVector& range, RowPtrVector &rows)
 {
     for (size_t i = 0; i < rows.size(); ++i)
     {
@@ -188,9 +190,9 @@ void CashDb::GetRows(const DateVector& range, RowPtrVector &rows)
     }
 }
 
-bool CashDb::HasRow(const string &date)
+bool CashDb::HasRow(const string &uuid)
 {
-    FORMAT_SQL(SQL_QUERY_ACCOUNT_HAS_DATE, date.c_str());
+    FORMAT_SQL(SQL_QUERY_ACCOUNT_HAS_UUID, uuid.c_str());
     Prepare();
     return (NextStep() == StepRow) ? true : false;
 }

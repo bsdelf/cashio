@@ -17,7 +17,7 @@ const char TABLE_ACCOUNT_TAG[] = "cashio_account_tag";
 const char SQL_BEGIN[] = "BEGIN;";
 const char SQL_COMMIT[] = "COMMIT;";
 const char SQL_QUERY_DATE[] =
-    "select strftime('%Y-%m-%d %H:%M:%f', 'now', 'localtime');";
+    "select strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime');";
 const char SQL_DROP_TABLE[] =
     "drop table if exists %s;";
 const char SQL_QUERY_TABLE_EXISTS[] =
@@ -41,39 +41,40 @@ const char SQL_QUERY_TAGS_HAS_TAG[] =
 /* based on cashio_account */
 const char SQL_CREATE_TABLE_ACCOUNT[] =
     "create table if not exists cashio_account ("
-    "Date datetime primary key,"
+    "Uuid text primary key,"
+    "Date datetime,"
     "IO varchar(255) not null,"
     "Amount double not null,"
     "Note text );";
 const char SQL_INSERT_ACCOUNT[] =
-    "insert into cashio_account values('%s', '%s', %.2f, '%s');";
+    "insert into cashio_account values('%s', '%s', '%s', %.2f, '%s');";
 const char SQL_UPDATE_ACCOUNT[] =
-    "update cashio_account set Date='%s', IO='%s', Amount=%f, Note='%s' where Date='%s';";
-const char SQL_DROP_ACCOUNT[] =
-    "delete from cashio_account where Date='%s';";
-const char SQL_QUERY_ACCOUNT_HAS_DATE[] =
-    "select Date from cashio_account where Date='%s';";
+    "update cashio_account set Date='%s', IO='%s', Amount=%f, Note='%s' where Uuid='%s';";
+const char SQL_DELETE_ACCOUNT[] =
+    "delete from cashio_account where Uuid='%s';";
+const char SQL_QUERY_ACCOUNT_HAS_UUID[] =
+    "select Uuid from cashio_account where Uuid='%s';";
 const char SQL_QUERY_ACOUNT_ALL_DATE[] =
-    "select Date from cashio_account order by Date desc;";
+    "select Uuid from cashio_account order by Date desc;";
 const char SQL_QUERY_ACCOUNT_ROW[] =
-    "select * from cashio_account where Date='%s';";
+    "select Date,IO,Amount,Note from cashio_account where Uuid='%s';";
 
 /* based on cashio_account_tag */
 const char SQL_CREATE_TABLE_ACCOUNT_TAG[] =
     "create table if not exists cashio_account_tag ("
-    "ID integer primary key autoincrement,"
-    "Date datetime,"
-    "Tag varchar(255),"
-    "foreign key(Date) references cashio_account(Date)"
+    "Uuid text primary key,"
+    "AccountUuId text not null,"
+    "Tag varchar(255) not null,"
+    "foreign key(AccountUuId) references cashio_account(Uuid)"
     "   on delete cascade on update cascade,"
     "foreign key(Tag) references cashio_tags(Tag)"
     "   on delete cascade on update cascade );";
 const char SQL_INSERT_ACCOUNT_TAG[] =
-    "insert into cashio_account_tag values(null, '%s', '%s');";
+    "insert into cashio_account_tag values('%s', '%s', '%s');";
 const char SQL_DELETE_ACCOUNT_TAG[] =
-    "delete from cashio_account_tag where Date='%s';";
+    "delete from cashio_account_tag where AccountUuId='%s';";
 const char SQL_QUERY_ACCOUNT_TAG[] =
     "select Tag, Color from cashio_tags where Tag in ("
-    "   select Tag from cashio_account_tag where Date='%s');";
+    "   select Tag from cashio_account_tag where AccountUuId='%s');";
 
 #endif // DBDEF_H

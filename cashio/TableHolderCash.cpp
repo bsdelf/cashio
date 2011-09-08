@@ -1,5 +1,4 @@
 #include "TableHolderCash.h"
-using namespace std;
 
 TableHolderCash::TableHolderCash(QObject *parent) :
     QObject(parent),
@@ -53,13 +52,14 @@ void TableHolderCash::setupTable(QTableView *table)
     mTagCellDelegate.setRowTags(&mRowTagVector);
 
     // load table
-    DateVector range;
-    mCashDb.QueryAllRows(range);
-    mCashDb.GetRows(range, mRowPtrVector);
-    qDebug() << mRowPtrVector.size() << endl;
+    mCashDb.QueryAllRows(mUuidRange);
+    mCashDb.GetRows(mUuidRange, mRowPtrVector);
     mModel.removeRows(0, mModel.rowCount());
     mRowTagVector.clear();
     mRowTagVector.reserve(mRowPtrVector.size());
+
+    qDebug() << "table rows:" << mRowPtrVector.size() << endl;
+
     for (size_t i = 0; i < mRowPtrVector.size(); ++i)
     {
         Row* row = mRowPtrVector[i];
@@ -164,8 +164,8 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     case ColumnDate:
     {
         bool formatVaild = QDateTime::fromString(cellValue, "yyyy-MM-dd HH:mm:ss.zzz").isValid();
-        bool keyVaild = !mCashDb.HasRow(cellValue.toStdString());
-        cellIsVaild = formatVaild && keyVaild;
+        //bool keyVaild = !mCashDb.HasRow(cellValue.toStdString());
+        cellIsVaild = formatVaild;// && keyVaild;
     }
         break;
 
@@ -241,7 +241,7 @@ void TableHolderCash::syncNewRecord()
     qDebug() << "note:" << QString::fromUtf8(row->note.c_str()) << endl;
 
     mRowPtrVector.insert(mRowPtrVector.begin(), row);
-    mCashDb.InsertRow(row);
+    mCashDb.InsertRow(QUuid::createUuid().toString().toStdString(), row);
     mHasNewRecord = false;
 }
 
@@ -253,12 +253,16 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     newRow.date = mModel.data(mModel.index(index.row(), ColumnDate)).toString().toStdString();
     newRow.io = mModel.data(mModel.index(index.row(), ColumnIO)).toString().toUtf8().data();
     newRow.amount = mModel.data(mModel.index(index.row(), ColumnAmount)).toDouble();
+
+    UuidVector tagUuids;
     QStringList tagNames = mModel.data(mModel.index(index.row(), ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
     newRow.tags.resize(tagNames.size());
+    tagUuids.resize(tagNames.size());
     for(size_t i = 0; i< newRow.tags.size(); ++i)
     {
         newRow.tags[i].name = tagNames[i].toUtf8().data();
         newRow.tags[i].color = Qt::red;
+        tagUuids[i] = QUuid::createUuid().toString().toStdString();
         qDebug() << "tag" << i << ":" << newRow.tags[i].name.c_str() << endl;
     }
     newRow.note = mModel.data(mModel.index(index.row(), ColumnNote)).toString().toUtf8().data();
@@ -272,8 +276,7 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     qDebug() << "tag count:" << tagNames.size();
     qDebug() << "note:" << QString::fromUtf8(newRow.note.c_str()) << endl;
 
-
-    mCashDb.UpdateRow(oldRow.date, newRow);
-    oldRow.tags.clear();
+    string uuid = mUuidRange[index.row()];
+    mCashDb.UpdateRow(uuid, newRow, tagUuids);
     oldRow = newRow;
 }
