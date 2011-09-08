@@ -58,7 +58,7 @@ void TableHolderCash::setupTable(QTableView *table)
     for (size_t i = 0; i < tags.size(); ++i)
     {
         mTagCellDelegate.insertTagColorPair(
-          QString::fromStdString(tags[i].name), tags[i].color);
+          QString::fromUtf8(tags[i].name.c_str()), tags[i].color);
     }
 
     // load table
@@ -280,16 +280,16 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
         newRow.tags[i].name = tagNames[i].toUtf8().data();
         newRow.tags[i].color = (rand()%(256))<<16 | (rand()%(256))<<8 | (rand()%(256));
         tagUuids[i] = QUuid::createUuid().toString().toStdString();
-        qDebug() << "tag" << i << ":" << newRow.tags[i].name.c_str() << endl;
+        qDebug() << "tag" << i << ":" << newRow.tags[i].name.c_str();
         qDebug() << "color:" << newRow.tags[i].color;
     }
 
     // write to database together with out "cache"
-    qDebug() << "date:" << newRow.date.c_str() << endl;
-    qDebug() << "io:" << QString::fromUtf8(newRow.io.c_str()) << endl;
-    qDebug() << "amout:" << newRow.amount << endl;
+    qDebug() << "date:" << newRow.date.c_str();
+    qDebug() << "io:" << QString::fromUtf8(newRow.io.c_str());
+    qDebug() << "amout:" << newRow.amount;
     qDebug() << "tag count:" << tagNames.size();
-    qDebug() << "note:" << QString::fromUtf8(newRow.note.c_str()) << endl;
+    qDebug() << "note:" << QString::fromUtf8(newRow.note.c_str());
 
     string uuid = mUuidRange[row];
     mCashDb.UpdateRow(uuid, newRow, tagUuids);
@@ -303,6 +303,6 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     for (size_t i = 0; i < tags.size(); ++i)
     {
         mTagCellDelegate.insertTagColorPair(
-          QString::fromStdString(tags[i].name), tags[i].color);
+          QString::fromUtf8(tags[i].name.c_str()), tags[i].color);
     }
 }
