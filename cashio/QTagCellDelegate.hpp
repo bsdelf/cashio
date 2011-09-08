@@ -111,7 +111,7 @@ public:
         //QItemDelegate::paint(painter, newOption, index);
     }
 
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
     {
         return mCellSize;
     }

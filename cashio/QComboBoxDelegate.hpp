@@ -27,8 +27,8 @@ public:
 
 public:
     QWidget *createEditor(
-        QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
-    {
+        QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
+    {        
         QComboBox* box = new QComboBox(parent);
         box->addItems(mOptions);
         return box;
@@ -53,7 +53,7 @@ public:
     }
 
     void updateEditorGeometry(
-        QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+        QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex&) const
     {
         editor->setGeometry(option.rect);
     }
