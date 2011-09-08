@@ -1,4 +1,5 @@
 #include "TableHolderCash.h"
+#include <ctime>
 
 TableHolderCash::TableHolderCash(QObject *parent) :
     QObject(parent),
@@ -261,11 +262,13 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     QStringList tagNames = mModel.data(mModel.index(index.row(), ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
     newRow.tags.resize(tagNames.size());
     tagUuids.resize(tagNames.size());
+    // NOTE: Under Windows the rand() is not as random as Unix,
+    // so we split color into r/g/b, instead of an single random integer.
     srand(time(NULL));
-    for(size_t i = 0; i< newRow.tags.size(); ++i)
+    for (size_t i = 0; i< newRow.tags.size(); ++i)
     {
         newRow.tags[i].name = tagNames[i].toUtf8().data();
-        newRow.tags[i].color = rand() % (16777215+1);
+        newRow.tags[i].color = (rand()%(256))<<16 | (rand()%(256))<<8 | (rand()%(256));
         tagUuids[i] = QUuid::createUuid().toString().toStdString();
         qDebug() << "tag" << i << ":" << newRow.tags[i].name.c_str() << endl;
         qDebug() << "color:" << newRow.tags[i].color;

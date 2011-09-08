@@ -66,7 +66,7 @@ public:
                 QRect rect = metric.boundingRect(mPtrRowTags->at(r)[i].name.text());
                 //mPtrRowTags->at(r)[i].textWidth = rect.width();
                 rowWidth += rect.width() + mTagSpace;
-                rowHeight = qMax(cellHeight, rect.height());
+                rowHeight = metric.height();//qMax(cellHeight, rect.height());
             }
             cellWidth = qMax(cellWidth, rowWidth);
             cellHeight = qMax(cellHeight, rowHeight);
@@ -78,16 +78,18 @@ public:
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
+        QFontMetrics metric(mTagFont);
         if (mPtrRowTags == NULL)
         {
             qDebug() << "null mPtrRowTags" <<  endl;
             return;
         }
 
-        if (index.row() >= mPtrRowTags->size())
+        const int row = index.row();
+        if (row >= mPtrRowTags->size())
         {
             qDebug() << "FATAL: index.row() >= mPtrRowTags->size()" << endl;
-            qDebug() << "index:" << index.row() << endl;
+            qDebug() << "index:" << row << endl;
             qDebug() << "size:" << mPtrRowTags->size() << endl;
             return;
         }
@@ -96,12 +98,12 @@ public:
 
         int textX = option.rect.left() + mTagSpace;
         int textY = option.rect.top() + (option.rect.height() - option.fontMetrics.height())/2;
-        for (int tagCol = 0; tagCol < mPtrRowTags->at(index.row()).size(); ++tagCol)
+        for (int tagCol = 0; tagCol < mPtrRowTags->at(row).size(); ++tagCol)
         {
-            painter->setPen(mPtrRowTags->at(index.row())[tagCol].color);
+            painter->setPen(mPtrRowTags->at(row)[tagCol].color);
             painter->drawStaticText(textX, textY,
-                                    mPtrRowTags->at(index.row())[tagCol].name);
-            textX += option.fontMetrics.width(mPtrRowTags->at(index.row())[tagCol].name.text()) + mTagSpace;//mPtrRowTags->at(index.row())[tagCol].textWidth + mTagSpace;
+                                    mPtrRowTags->at(row)[tagCol].name);
+            textX += option.fontMetrics.width(mPtrRowTags->at(row)[tagCol].name.text()) + mTagSpace;//mPtrRowTags->at(index.row())[tagCol].textWidth + mTagSpace;
         }
 
         //painter->fillRect(option.rect, Qt::red);
@@ -111,9 +113,25 @@ public:
         //QItemDelegate::paint(painter, newOption, index);
     }
 
-    QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
     {
-        return mCellSize;
+        const int row = index.row();
+        if (row >= mPtrRowTags->size())
+        {
+            return option.rect.size();
+        }
+
+        QFontMetrics metric(option.font);
+
+        int cellWidth = mTagSpace;
+        int cellHeight = metric.height();;
+
+        for (int i = 0; i < mPtrRowTags->at(row).size(); ++i)
+        {
+            cellWidth += metric.width(mPtrRowTags->at(row)[i].name.text()) + mTagSpace;
+        }
+
+        return QSize(cellWidth, cellHeight);
     }
 
 private:
