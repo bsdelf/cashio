@@ -52,9 +52,11 @@ private:
     QStandardItemModel mModel;
     CashDb mCashDb;
 
-    sqt::QComboBoxDelegate mCombDelegateInOut;
-    sqt::QBaseCellDelegate mVaildCellDelegate;
+    sqt::QBaseCellDelegate mDateCellDelegate;
+    sqt::QComboBoxDelegate mIOCellDelegate;
+    sqt::QBaseCellDelegate mAmountCellDelegate;
     sqt::QTagCellDelegate mTagCellDelegate;
+    sqt::QBaseCellDelegate mNoteCellDelegate;
 
     bool mHasNewRecord;
     bool mHasInvaildCell;

@@ -5,7 +5,7 @@
 #include <QtCore>
 
 /*
-  Support cell background color, text alignment.
+  Support cell background color, text alignment, custom highlight.
 */
 
 namespace sqt {
@@ -46,17 +46,50 @@ public:
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
-        QStyleOptionViewItem newOption(option);
-        if (mIndexSet.contains(index))
-        {
-            painter->fillRect(newOption.rect, mCellColor);
-            newOption.palette.setColor(QPalette::Base, mCellColor);
-            newOption.palette.setColor(QPalette::Window, mCellColor);
-            newOption.palette.setColor(QPalette::Highlight, mCellColor);
+        paintBackground(painter, option);
 
+        if (mIndexSet.contains(index)) {
+            painter->fillRect(option.rect, mCellColor);
         }
-        newOption.displayAlignment = mAlignment;
-        QItemDelegate::paint(painter, newOption, index);
+
+        QStyle *style = QApplication::style();
+        const int textMargin = style->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+        int textX = option.rect.left() + textMargin;
+        int textY = option.rect.top() + (option.rect.height() - option.fontMetrics.height())/2;
+
+        QTextOption textOption;
+        textOption.setAlignment(mAlignment);
+        textOption.setWrapMode(QTextOption::NoWrap);
+
+        QString text = index.data(Qt::DisplayRole).toString();
+        QStaticText staticText(text);
+        staticText.setTextWidth(option.rect.width() - textMargin*2);
+        staticText.setTextOption(textOption);
+
+        painter->setPen(Qt::black);
+        painter->drawStaticText(textX, textY, staticText);
+    }
+
+protected:
+    void paintBackground(QPainter *painter, const QStyleOptionViewItem &option) const
+    {
+        if (option.state & QStyle::State_Selected) {
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing, true);
+            painter->setPen(Qt::red);
+            painter->setBrush(Qt::white);
+            painter->drawRoundedRect(option.rect, 3, 3);
+            painter->restore();
+        } else if (option.state & QStyle::State_MouseOver) {
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing, true);
+            painter->setPen(option.palette.highlight().color());
+            painter->setBrush(Qt::white);
+            painter->drawRoundedRect(option.rect, 3, 3);
+            painter->restore();
+        } else {
+            painter->fillRect(option.rect, Qt::white);
+        }
     }
 
 protected:

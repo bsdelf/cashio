@@ -8,12 +8,17 @@ TableHolderCash::TableHolderCash(QObject *parent) :
 {
     openDb("a.db");   
 
-    mCombDelegateInOut.addText("In");
-    mCombDelegateInOut.addText("Out");
-    mCombDelegateInOut.setTextAlignment(Qt::AlignCenter);
+    mDateCellDelegate.setTextAlignment(Qt::AlignCenter);
+    mDateCellDelegate.setCellColor(QColor(255, 48, 48));
 
-    mVaildCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    mVaildCellDelegate.setCellColor(QColor(255, 48, 48));
+    mIOCellDelegate.addText("In");
+    mIOCellDelegate.addText("Out");
+    mIOCellDelegate.setTextAlignment(Qt::AlignCenter);
+
+    mAmountCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
+    mAmountCellDelegate.setCellColor(QColor(255, 48, 48));
+
+    mNoteCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 }
 
 TableHolderCash::~TableHolderCash()
@@ -44,10 +49,11 @@ void TableHolderCash::setupTable(QTableView *table)
     QStringList list;
     list << tr("Date") << tr("IO") << tr("Amount") << tr("Tags") << tr("Note");
     mModel.setHorizontalHeaderLabels(list);
-    mPtrTable->setItemDelegateForColumn(ColumnDate, &mVaildCellDelegate);
-    mPtrTable->setItemDelegateForColumn(ColumnIO, &mCombDelegateInOut);
-    mPtrTable->setItemDelegateForColumn(ColumnAmount, &mVaildCellDelegate);
+    mPtrTable->setItemDelegateForColumn(ColumnDate, &mDateCellDelegate);
+    mPtrTable->setItemDelegateForColumn(ColumnIO, &mIOCellDelegate);
+    mPtrTable->setItemDelegateForColumn(ColumnAmount, &mAmountCellDelegate);
     mPtrTable->setItemDelegateForColumn(ColumnTag, &mTagCellDelegate);
+    mPtrTable->setItemDelegateForColumn(ColumnNote, &mNoteCellDelegate);
 
     // setup TagCellDelegate
     TagVector tags;
@@ -174,9 +180,7 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     {
     case ColumnDate:
     {
-        bool formatVaild = QDateTime::fromString(cellValue, "yyyy-MM-dd HH:mm:ss").isValid();
-        //bool keyVaild = !mCashDb.HasRow(cellValue.toStdString());
-        cellIsVaild = formatVaild;// && keyVaild;
+        cellIsVaild = QDateTime::fromString(cellValue, "yyyy-MM-dd HH:mm:ss").isValid();
     }
         break;
 
@@ -188,7 +192,8 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
 
     if (cellIsVaild)
     {
-        mVaildCellDelegate.removeIndex(index);
+        mDateCellDelegate.removeIndex(index);
+        mAmountCellDelegate.removeIndex(index);
 
         if (index.column() == ColumnAmount)
         {
@@ -203,7 +208,8 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     }
     else
     {
-        mVaildCellDelegate.insertIndex(index);
+        mDateCellDelegate.insertIndex(index);
+        mAmountCellDelegate.insertIndex(index);
     }
     // resize
     mPtrTable->resizeColumnsToContents();

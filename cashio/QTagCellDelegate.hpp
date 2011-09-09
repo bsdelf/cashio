@@ -3,14 +3,14 @@
 
 #include <QtGui>
 #include <QtCore>
-
+#include "QBaseCellDelegate.hpp"
 /*
   Support colorful text in cell
 */
 
 namespace sqt {
 
-class QTagCellDelegate: public QItemDelegate
+class QTagCellDelegate: public QBaseCellDelegate
 {
     Q_OBJECT
 
@@ -110,16 +110,16 @@ public:
 
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-    {
-        if (mRowTagPtrs.empty())
-        {
+    {               
+        paintBackground(painter, option);
+
+        if (mRowTagPtrs.empty()) {
             qDebug() << "empty mRowTagPtrs" <<  endl;
             return;
         }
 
         const int row = index.row();
-        if (row >= mRowTagPtrs.size())
-        {
+        if (row >= mRowTagPtrs.size()) {
             qDebug() << "FATAL: <QTagCellDelegate> row index outof range" << endl;
             qDebug() << "index:" << row << endl;
             qDebug() << "size:" << mRowTagPtrs.size() << endl;
@@ -129,8 +129,7 @@ public:
         int textX = option.rect.left() + mTagSpace;
         int textY = option.rect.top() + (option.rect.height() - option.fontMetrics.height())/2;
         const RowTag& rowTag = *mRowTagPtrs[row];
-        for (int col = 0; col < rowTag.size(); ++col)
-        {
+        for (int col = 0; col < rowTag.size(); ++col) {
             QString tag = rowTag[col];
             painter->setPen(mTagColors[tag]);
             painter->drawStaticText(textX, textY, QStaticText(tag));
@@ -138,11 +137,16 @@ public:
         }
     }
 
+    int  QColorToInt(const QColor &color) const
+    {
+    //将Color 从QColor 转换成 int
+    return   (int)(((unsigned int)color.blue()<< 16) | (unsigned short)(((unsigned short)color.green()<< 8) | color.red()));
+    }
+
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
     {
         const int row = index.row();
-        if (row >= mRowTagPtrs.size())
-        {
+        if (row >= mRowTagPtrs.size()) {
             return option.rect.size();
         }
 
@@ -150,8 +154,7 @@ public:
         int cellWidth = mTagSpace;
         int cellHeight = metric.height();;
         const RowTag& rowTag = *mRowTagPtrs[row];
-        for (int col = 0; col < rowTag.size(); ++col)
-        {
+        for (int col = 0; col < rowTag.size(); ++col) {
             cellWidth += metric.width(rowTag[col]) + mTagSpace;
         }
 
