@@ -34,7 +34,6 @@ public:
         QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
     {        
         QComboBox* box = new QComboBox(parent);
-        box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         box->addItems(mOptions);
         box->sizeHint();
         return box;
