@@ -66,8 +66,7 @@ void MainWindow::switchToolBar(ToolBarIndex pageIndex)
 
 void MainWindow::focusCurrentEditQuery()
 {
-    switch (ui->widgetToolExt->currentIndex())
-    {
+    switch (ui->widgetToolExt->currentIndex()) {
     case ToolExtQueryCond:
         ui->editQueryCond->setFocus();
         break;
@@ -101,8 +100,7 @@ void MainWindow::slotBtnQueryClicked()
 {
     bool shouldShow = ui->widgetToolExt->isHidden();
 
-    if (shouldShow)
-    {
+    if (shouldShow) {
         focusCurrentEditQuery();
     }
     ui->widgetToolExt->setShown(shouldShow);

@@ -61,8 +61,7 @@ void TableHolderCash::setupTable(QTableView *table)
     mTagCellDelegate.setTagFont(mPtrTable->font());
     mTagCellDelegate.setTagSpace(10);
     mTagCellDelegate.reserveTagColor(tags.size());
-    for (size_t i = 0; i < tags.size(); ++i)
-    {
+    for (size_t i = 0; i < tags.size(); ++i) {
         mTagCellDelegate.insertTagColorPair(
           QString::fromUtf8(tags[i].name.c_str()), tags[i].color);
     }
@@ -73,13 +72,12 @@ void TableHolderCash::setupTable(QTableView *table)
     RowPtrVector rowPtrs;
     mCashDb.QueryAllRows(mUuidRange);
     mCashDb.GetRows(mUuidRange, rowPtrs);
-    qDebug() << "table rows:" << rowPtrs.size() << endl;
+    qDebug() << "table rows:" << rowPtrs.size();
 
     mModel.removeRows(0, mModel.rowCount());
     mTagCellDelegate.clearRowTagPtrs();
     mTagCellDelegate.reserveRowTagPtrs(rowPtrs.size());
-    for (size_t i = 0; i < rowPtrs.size(); ++i)
-    {
+    for (size_t i = 0; i < rowPtrs.size(); ++i) {
         Row* row = rowPtrs[i];
         QList<QStandardItem*> rowList;
         rowList << new QStandardItem(QString::fromStdString(row->date));
@@ -87,8 +85,7 @@ void TableHolderCash::setupTable(QTableView *table)
         rowList << new QStandardItem(QString::number(row->amount, 'f', 2));
         QString tagNames;
         QStringList tagNameList;
-        for (size_t i = 0; i < row->tags.size(); ++i)
-        {
+        for (size_t i = 0; i < row->tags.size(); ++i) {
             QString tagName = QString::fromUtf8(row->tags[i].name.c_str());
             tagNames += tagName + " ";
             tagNameList << tagName;
@@ -126,8 +123,7 @@ void TableHolderCash::prepareNewRow()
     row << new QStandardItem();
     row << new QStandardItem();
 
-    if (mHasNewRecord)
-    {
+    if (mHasNewRecord) {
         mModel.removeRow(0);
     }
     mModel.insertRow(0, row);
@@ -147,11 +143,9 @@ void TableHolderCash::prepareNewRow()
 bool TableHolderCash::tryToSaveRows()
 {
     mHasNewRecord = false;
-    for (int i = 0; i < mModel.columnCount(); ++i)
-    {
+    for (int i = 0; i < mModel.columnCount(); ++i) {
         QStandardItem* item = mModel.item(0, i);
-        if (item->text().isEmpty())
-        {
+        if (item->text().isEmpty()) {
             mModel.removeRow(0);
             return false;
         }
@@ -161,8 +155,7 @@ bool TableHolderCash::tryToSaveRows()
 
 bool TableHolderCash::rmSelectedRows()
 {
-    if (mHasNewRecord)
-    {
+    if (mHasNewRecord) {
         mModel.removeRow(0);
         mHasNewRecord = false;
     }
@@ -176,8 +169,7 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     QModelIndex index = item->index();
     QString cellValue(mModel.data(index).toString());
 
-    switch (index.column())
-    {
+    switch (index.column()) {
     case ColumnDate:
     {
         cellIsVaild = QDateTime::fromString(cellValue, "yyyy-MM-dd HH:mm:ss").isValid();
@@ -190,13 +182,11 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     }
     mHasInvaildCell = !cellIsVaild;
 
-    if (cellIsVaild)
-    {
+    if (cellIsVaild) {
         mDateCellDelegate.removeIndex(index);
         mAmountCellDelegate.removeIndex(index);
 
-        if (index.column() == ColumnAmount)
-        {
+        if (index.column() == ColumnAmount) {
             double value = mModel.data(index).toDouble();
             mModel.setData(index, QString::number(value, 'f', 2));
         }
@@ -205,16 +195,14 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
             syncNewRecord();
         else
             updateRecord(index);
-    }
-    else
-    {
+    } else {
         mDateCellDelegate.insertIndex(index);
         mAmountCellDelegate.insertIndex(index);
     }
     // resize
     mPtrTable->resizeColumnsToContents();
     mPtrTable->horizontalHeader()->setStretchLastSection(true);
-    qDebug() << "r:" << item->row() << " c:" << item->column() << endl;
+    qDebug() << "row:" << item->row() << " column:" << item->column();
 }
 
 bool TableHolderCash::hasInvaildCell()
@@ -236,7 +224,7 @@ void TableHolderCash::syncNewRecord()
 {
     if (!mHasNewRecord)
         return;
-    qDebug() << "sync" << endl;
+    qDebug() << "sync!!";
 
     Row* row = new Row;
     row->date = mModel.data(mModel.index(0, ColumnDate)).toString().toStdString();
@@ -244,8 +232,7 @@ void TableHolderCash::syncNewRecord()
     row->amount = mModel.data(mModel.index(0, ColumnAmount)).toDouble();
     QStringList tagList = mModel.data(mModel.index(0, ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
     row->tags.resize(tagList.size());
-    for(size_t i = 0; i< row->tags.size(); ++i)
-    {
+    for(size_t i = 0; i< row->tags.size(); ++i) {
         row->tags[i].name = "";
         row->tags[i].color = 0;
         qDebug() << "tag" << i << ":" << row->tags[i].name.c_str();
@@ -267,7 +254,7 @@ void TableHolderCash::syncNewRecord()
 
 void TableHolderCash::updateRecord(const QModelIndex &index)
 {
-    qDebug() << "update" << endl;
+    qDebug() << "update!!";
 
     const int row = index.row();
 
@@ -286,8 +273,7 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     // NOTE: Under Windows the rand() is not as random as Unix,
     // so we split color into r/g/b, instead of an single random integer[0, 2^31).
     srand(time(NULL));
-    for (size_t i = 0; i< newRow.tags.size(); ++i)
-    {
+    for (size_t i = 0; i< newRow.tags.size(); ++i) {
         newRow.tags[i].name = tagNames[i].toUtf8().data();
         newRow.tags[i].color = (rand()%(256))<<16 | (rand()%(256))<<8 | (rand()%(256));
         tagUuids[i] = QUuid::createUuid().toString().toStdString();
@@ -307,8 +293,7 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     mCashDb.UpdateRow(uuid, newRow, tagUuids, newTags);
     //*mRowPtrVector[row] = newRow;
     mTagCellDelegate.updateRowTag(row, tagNames);
-    for (size_t i = 0; i < newTags.size(); ++i)
-    {
+    for (size_t i = 0; i < newTags.size(); ++i) {
         mTagCellDelegate.insertTagColorPair(
           QString::fromUtf8(newTags[i].name.c_str()), newTags[i].color);
     }
