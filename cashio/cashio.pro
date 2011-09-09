@@ -18,14 +18,14 @@ SOURCES += main.cpp\
 HEADERS  += MainWindow.h \
     DbDef.h \
     CashDb.h \
-    SqliteBase.h \
     ConfigWin.h \
     ConfigUnix.h \
     TableHolderTags.h \
     TableHolderCash.h \
     QComboBoxDelegate.hpp \
     QBaseCellDelegate.hpp \
-    QTagCellDelegate.hpp
+    QTagCellDelegate.hpp \
+    SqliteBase.hpp
 
 FORMS    += MainWindow.ui
 

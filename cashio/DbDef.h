@@ -32,7 +32,7 @@ const char SQL_CREATE_TABLE_TAGS[] =
 const char SQL_INSERT_TAG[] =
     "insert into cashio_tags values('%s', %d);";
 const char SQL_UPDATE_TAG[] =
-    "update cashio_tags set Tag='%s', Color=%d;";
+    "update cashio_tags set Tag='%s', Color=%d where Tag='%s';";
 const char SQL_DELETE_TAG[] =
     "delete from cashio_tags where Tag='%s';";
 const char SQL_QUERY_TAGS_HAS_TAG[] =

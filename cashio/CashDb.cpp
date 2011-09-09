@@ -62,14 +62,19 @@ void CashDb::InsertTag(const Tag &tag)
     ExecSql();
 }
 
-void CashDb::DropTag(const string &tagName)
+void CashDb::DeleteTag(const string &tagName)
 {
-
+    FORMAT_SQL(SQL_DELETE_TAG, tagName.c_str());
+    ExecSql();
 }
 
-void CashDb::UpdateTag(const string &tagName, const Tag &newTag)
+void CashDb::UpdateTag(const string &oldTagName, const Tag &newTag)
 {
-
+    FORMAT_SQL(SQL_UPDATE_TAG,
+               newTag.name.c_str(),
+               newTag.color,
+               oldTagName.c_str());
+    ExecSql();
 }
 
 void CashDb::GetTags(TagVector &tags)

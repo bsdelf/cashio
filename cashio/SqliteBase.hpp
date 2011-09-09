@@ -1,5 +1,5 @@
-#ifndef SQLITEHELPER_H
-#define SQLITEHELPER_H
+#ifndef SqliteBase_hpp
+#define SqliteBase_hpp
 
 #include <string>
 #include <iostream>
@@ -15,6 +15,8 @@ using namespace std;
 #define FORMAT_SQL(...)  \
     snprintf(mSqlBuf, mSqlBufSize, __VA_ARGS__);\
     mSqlPtr = mSqlBuf;
+
+namespace scx {
 
 enum StepStatus
 {
@@ -115,4 +117,6 @@ protected:
     sqlite3_stmt* mStmt;
 };
 
-#endif // SQLITEHELPER_H
+}
+
+#endif // SqliteBase_hpp

@@ -4,7 +4,8 @@
 #include <vector>
 #include <string>
 using namespace std;
-#include "SqliteBase.h"
+#include "SqliteBase.hpp"
+using namespace scx;
 
 struct Tag
 {
@@ -46,8 +47,8 @@ public:
     void ClearDb();
 
     void InsertTag(const Tag& tag);
-    void DropTag(const string& tagName);
-    void UpdateTag(const string& tagName, const Tag& newTag);
+    void DeleteTag(const string& tagName);
+    void UpdateTag(const string& oldTagName, const Tag& newTag);
     void GetTags(TagVector& tags);
     bool HasTag(const string& tagName);
 
