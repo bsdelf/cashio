@@ -121,8 +121,10 @@ void CashDb::DeleteRow(const string &uuid)
     ExecSql();
 }
 
-void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tagUuids)
+void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tagUuids, TagVector& newTags)
 {
+    newTags.clear();
+
     // clear all old tags
     FORMAT_SQL(SQL_DELETE_ACCOUNT_TAGS, uuid.c_str());
     ExecSql();
@@ -138,12 +140,15 @@ void CashDb::UpdateRow(const string &uuid, const Row &row, const UuidVector& tag
 
     // complete tags and relationships
     COPY_SQL(SQL_BEGIN);
-    ExecSql();
+    ExecSql();    
     for (size_t i = 0; i < row.tags.size(); ++i)
     {
         Tag tag = row.tags[i];
         if (!HasTag(tag.name))
+        {
             InsertTag(tag);
+            newTags.push_back(tag);
+        }
 
         FORMAT_SQL(SQL_INSERT_ACCOUNT_TAG, tagUuids[i].c_str(), uuid.c_str(), tag.name.c_str());
         ExecSql();

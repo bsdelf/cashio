@@ -53,7 +53,7 @@ public:
 
     void InsertRow(const string& uuid, const Row* item);
     void DeleteRow(const string& uuid);
-    void UpdateRow(const string& uuid, const Row& row, const UuidVector& tagUuids);
+    void UpdateRow(const string& uuid, const Row& row, const UuidVector& tagUuids, TagVector& newTags);
     void QueryAllRows(UuidVector& range);
     void QueryRows(const string& query, UuidVector& range);
     void GetRows(const UuidVector& range, RowPtrVector &rows);
