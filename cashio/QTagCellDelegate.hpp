@@ -4,6 +4,10 @@
 #include <QtGui>
 #include <QtCore>
 
+/*
+  Support colorful text in cell
+*/
+
 namespace sqt {
 
 class QTagCellDelegate: public QItemDelegate

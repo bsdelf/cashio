@@ -6,7 +6,7 @@ TableHolderCash::TableHolderCash(QObject *parent) :
     mHasNewRecord(false),
     mHasInvaildCell(false)
 {
-    openDb("a.db");
+    openDb("a.db");   
 
     mCombDelegateInOut.addText("In");
     mCombDelegateInOut.addText("Out");
@@ -61,17 +61,20 @@ void TableHolderCash::setupTable(QTableView *table)
           QString::fromUtf8(tags[i].name.c_str()), tags[i].color);
     }
 
+    mPtrTable->setModel(&mModel);
+
     // load table
+    RowPtrVector rowPtrs;
     mCashDb.QueryAllRows(mUuidRange);
-    mCashDb.GetRows(mUuidRange, mRowPtrVector);
-    qDebug() << "table rows:" << mRowPtrVector.size() << endl;
+    mCashDb.GetRows(mUuidRange, rowPtrs);
+    qDebug() << "table rows:" << rowPtrs.size() << endl;
 
     mModel.removeRows(0, mModel.rowCount());
     mTagCellDelegate.clearRowTagPtrs();
-    mTagCellDelegate.reserveRowTagPtrs(mRowPtrVector.size());
-    for (size_t i = 0; i < mRowPtrVector.size(); ++i)
+    mTagCellDelegate.reserveRowTagPtrs(rowPtrs.size());
+    for (size_t i = 0; i < rowPtrs.size(); ++i)
     {
-        Row* row = mRowPtrVector[i];
+        Row* row = rowPtrs[i];
         QList<QStandardItem*> rowList;
         rowList << new QStandardItem(QString::fromStdString(row->date));
         rowList << new QStandardItem(QString::fromUtf8(row->io.c_str()));
@@ -88,8 +91,8 @@ void TableHolderCash::setupTable(QTableView *table)
         rowList << new QStandardItem(QString::fromUtf8(row->note.c_str()));
         mModel.appendRow(rowList);
         mTagCellDelegate.appendRowTag(tagNameList);
-    }
-    mPtrTable->setModel(&mModel);
+        delete row;
+    }    
 
     // adjust head
     mPtrTable->resizeColumnsToContents();
@@ -171,7 +174,7 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     {
     case ColumnDate:
     {
-        bool formatVaild = QDateTime::fromString(cellValue, "yyyy-MM-dd HH:mm:ss.zzz").isValid();
+        bool formatVaild = QDateTime::fromString(cellValue, "yyyy-MM-dd HH:mm:ss").isValid();
         //bool keyVaild = !mCashDb.HasRow(cellValue.toStdString());
         cellIsVaild = formatVaild;// && keyVaild;
     }
@@ -250,7 +253,7 @@ void TableHolderCash::syncNewRecord()
 
     string uuid = QUuid::createUuid().toString().toStdString();
     mUuidRange.insert(mUuidRange.begin(), uuid);
-    mRowPtrVector.insert(mRowPtrVector.begin(), row);
+    //mRowPtrVector.insert(mRowPtrVector.begin(), row);
     mTagCellDelegate.updateRowTag(0, tagList);
     mCashDb.InsertRow(uuid, row);
     mHasNewRecord = false;
@@ -296,7 +299,7 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     string uuid = mUuidRange[row];
     TagVector newTags;
     mCashDb.UpdateRow(uuid, newRow, tagUuids, newTags);
-    *mRowPtrVector[row] = newRow;
+    //*mRowPtrVector[row] = newRow;
     mTagCellDelegate.updateRowTag(row, tagNames);
     for (size_t i = 0; i < newTags.size(); ++i)
     {

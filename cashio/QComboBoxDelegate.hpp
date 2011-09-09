@@ -5,6 +5,10 @@
 #include <QtGui>
 #include "QBaseCellDelegate.hpp"
 
+/*
+  Show a combobox in cell when edit. Support text alignment when normal.
+*/
+
 namespace sqt {
 
 class QComboBoxDelegate : public QBaseCellDelegate
@@ -30,7 +34,9 @@ public:
         QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
     {        
         QComboBox* box = new QComboBox(parent);
+        box->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         box->addItems(mOptions);
+        box->sizeHint();
         return box;
     }
 
@@ -56,8 +62,17 @@ public:
         QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex&) const
     {
         editor->setGeometry(option.rect);
-    }
+    }      
 
+    QSize sizeHint(
+        const QStyleOptionViewItem & option, const QModelIndex & index) const
+    {
+        QComboBox box;
+        box.setFont(option.font);
+        box.setSizeAdjustPolicy(QComboBox::AdjustToContents);
+        box.addItems(mOptions);
+        return box.sizeHint();
+    }
 
 private:
     QStringList mOptions;

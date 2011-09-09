@@ -4,6 +4,10 @@
 #include <QtGui>
 #include <QtCore>
 
+/*
+  Support cell background color, text alignment.
+*/
+
 namespace sqt {
 
 class QBaseCellDelegate: public QItemDelegate

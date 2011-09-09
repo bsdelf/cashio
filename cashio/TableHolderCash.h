@@ -59,9 +59,7 @@ private:
     bool mHasNewRecord;
     bool mHasInvaildCell;
 
-    TagVector mTagVector;
     UuidVector mUuidRange;
-    RowPtrVector mRowPtrVector;
 };
 
 #endif // TableHolderCash_H
