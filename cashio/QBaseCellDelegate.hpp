@@ -73,6 +73,10 @@ public:
 protected:
     void paintBackground(QPainter *painter, const QStyleOptionViewItem &option) const
     {
+        // NOTE: enable mouseTracking for the widget!!
+
+        painter->fillRect(option.rect, Qt::white);
+
         if (option.state & QStyle::State_Selected) {
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
@@ -87,8 +91,6 @@ protected:
             painter->setBrush(Qt::white);
             painter->drawRoundedRect(option.rect, 3, 3);
             painter->restore();
-        } else {
-            painter->fillRect(option.rect, Qt::white);
         }
     }
 

@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QtCore>
 #include "QBaseCellDelegate.hpp"
+
 /*
   Support colorful text in cell
 */
