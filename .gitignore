@@ -1,5 +1,6 @@
 *.user
 *.swp
+app/
 cashio/include/
 cashio/lib/
 cashio-build-desktop/
