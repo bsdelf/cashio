@@ -1,5 +1,4 @@
 #include "TableHolderCash.h"
-#include "sqt/Convert.hpp"
 #include <ctime>
 
 TableHolderCash::TableHolderCash(QObject *parent) :
