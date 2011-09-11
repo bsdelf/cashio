@@ -5,7 +5,7 @@
 #include <QtCore>
 
 /*
-  Support cell background color, text alignment, custom highlight.
+  Support cell highlight, text alignment, custom highlight.
 */
 
 namespace sqt {
@@ -23,19 +23,14 @@ public:
     ~QBaseCellDelegate() {}
 
 public:
-    void insertIndex(const QModelIndex& index)
+    void insertHighlightIndex(const QModelIndex& index, const QColor& color)
     {
-        mIndexSet.insert(index);
+        mHighlightIndexMap.insert(index, color);
     }
 
-    void removeIndex(const QModelIndex& index)
+    void removeHighlightIndex(const QModelIndex& index)
     {
-        mIndexSet.remove(index);
-    }
-
-    void setCellColor(const QColor& color)
-    {
-        mCellColor = color;
+        mHighlightIndexMap.remove(index);
     }
 
     void setTextAlignment(const Qt::Alignment& alignment)
@@ -46,10 +41,10 @@ public:
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
-        paintBackground(painter, option);
+        paintBackground(painter, option, index);
 
-        if (mIndexSet.contains(index)) {
-            painter->fillRect(option.rect, mCellColor);
+        if (mHighlightIndexMap.contains(index)) {
+            painter->fillRect(option.rect, mHighlightIndexMap[index]);
         }
 
         QStyle *style = QApplication::style();
@@ -71,12 +66,9 @@ public:
     }
 
 protected:
-    void paintBackground(QPainter *painter, const QStyleOptionViewItem &option) const
+    void paintBackground(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
-        // NOTE: enable mouseTracking for the widget!!
-
-        painter->fillRect(option.rect, Qt::white);
-
+        // NOTE: enable mouseTracking for the widget!!        
         if (option.state & QStyle::State_Selected) {
             painter->save();
             painter->setRenderHint(QPainter::Antialiasing, true);
@@ -91,13 +83,17 @@ protected:
             painter->setBrush(Qt::white);
             painter->drawRoundedRect(option.rect, 3, 3);
             painter->restore();
+        } else {
+            //if (index.row() & 1)
+                painter->fillRect(option.rect, Qt::white);
+            //else
+            //    painter->fillRect(option.rect, Qt::lightGray);
         }
     }
 
 protected:
-    QSet<QModelIndex> mIndexSet;
-    QColor mCellColor;
     Qt::Alignment mAlignment;
+    QHash<QModelIndex, QColor> mHighlightIndexMap;
 };
 
 }

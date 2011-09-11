@@ -34,11 +34,10 @@ public:
 
 public:
     void prepareNewRow();
-    bool tryToSaveRows();
-    bool rmSelectedRows();
+    void removeRows();
 
 private:
-    bool hasInvaildCell();
+    void notifyInvaildCell();
     void syncNewRecord();
     void updateRecord(const QModelIndex& index);
 

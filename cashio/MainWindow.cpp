@@ -44,7 +44,6 @@ void MainWindow::setupSlots()
     connect(ui->btnAdd, SIGNAL(clicked()), this, SLOT(slotBtnAddClicked()));
     connect(ui->btnDrop, SIGNAL(clicked()), this, SLOT(slotBtnDropClicked()));
     connect(ui->btnQuery, SIGNAL(clicked()), this, SLOT(slotBtnQueryClicked()));
-    //connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(slotBtnSaveClicked()));
 
     connect(ui->btnEnterSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnEnterSqlModeClicked()));
     connect(ui->btnQuitSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnQuitSqlModeClicked()));
@@ -93,7 +92,7 @@ void MainWindow::slotBtnAddClicked()
 
 void MainWindow::slotBtnDropClicked()
 {
-
+    mTableCash.removeRows();
 }
 
 void MainWindow::slotBtnQueryClicked()
@@ -104,11 +103,6 @@ void MainWindow::slotBtnQueryClicked()
         focusCurrentEditQuery();
     }
     ui->widgetToolExt->setShown(shouldShow);
-}
-
-void MainWindow::slotBtnSaveClicked()
-{
-    mTableCash.tryToSaveRows();
 }
 
 void MainWindow::slotCbxPageIndexChanged(int index)

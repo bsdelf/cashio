@@ -24,7 +24,7 @@ enum StepStatus
     StepDone = SQLITE_DONE,
     StepError = SQLITE_ERROR,
     StepMisuse = SQLITE_MISUSE,
-    StepRow = SQLITE_ROW,
+    StepRow = SQLITE_ROW
 };
 
 class SqliteBase
@@ -54,7 +54,7 @@ protected:
         ExecSql("PRAGMA journal_mode=off;");
         ExecSql("PRAGMA synchronous=off;");
         ExecSql("PRAGMA cache_size=8000;");
-        ExecSql("PRAGMA foreign_keys = ON;");
+        ExecSql("PRAGMA foreign_keys=ON;");
     }
 
     void ExecSql()

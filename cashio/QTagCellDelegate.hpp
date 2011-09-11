@@ -112,7 +112,7 @@ public:
 public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {               
-        paintBackground(painter, option);
+        paintBackground(painter, option, index);
 
         if (mRowTagPtrs.empty()) {
             qDebug() << "empty mRowTagPtrs" <<  endl;
@@ -136,12 +136,6 @@ public:
             painter->drawStaticText(textX, textY, QStaticText(tag));
             textX += option.fontMetrics.width(tag) + mTagSpace;
         }
-    }
-
-    int  QColorToInt(const QColor &color) const
-    {
-    //将Color 从QColor 转换成 int
-    return   (int)(((unsigned int)color.blue()<< 16) | (unsigned short)(((unsigned short)color.green()<< 8) | color.red()));
     }
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const

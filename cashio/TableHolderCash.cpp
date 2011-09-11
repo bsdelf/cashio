@@ -1,4 +1,5 @@
 #include "TableHolderCash.h"
+#include "sqt/Convert.hpp"
 #include <ctime>
 
 TableHolderCash::TableHolderCash(QObject *parent) :
@@ -9,14 +10,12 @@ TableHolderCash::TableHolderCash(QObject *parent) :
     openDb("a.db");   
 
     mDateCellDelegate.setTextAlignment(Qt::AlignCenter);
-    mDateCellDelegate.setCellColor(QColor(255, 48, 48));
 
-    mIOCellDelegate.addText("In");
-    mIOCellDelegate.addText("Out");
+    mIOCellDelegate.addText(tr("In"));
+    mIOCellDelegate.addText(tr("Out"));
     mIOCellDelegate.setTextAlignment(Qt::AlignCenter);
 
     mAmountCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    mAmountCellDelegate.setCellColor(QColor(255, 48, 48));
 
     mNoteCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 }
@@ -28,7 +27,7 @@ TableHolderCash::~TableHolderCash()
 
 void TableHolderCash::openDb(const QString &path)
 {
-    mCashDb.OpenDb(path.toStdString());
+    mCashDb.OpenDb(path.toUtf8().data());
     mCashDb.InitDb();
 }
 
@@ -39,11 +38,7 @@ void TableHolderCash::closeDb()
 
 void TableHolderCash::setupTable(QTableView *table)
 {
-    mPtrTable = table;
-
-    mPtrTable->verticalHeader()->setVisible(true);
-    mPtrTable->horizontalHeader()->setVisible(true);
-    mPtrTable->setAlternatingRowColors(true);
+    mPtrTable = table;   
 
     // setup head
     QStringList list;
@@ -72,7 +67,6 @@ void TableHolderCash::setupTable(QTableView *table)
     RowPtrVector rowPtrs;
     mCashDb.QueryAllRows(mUuidRange);
     mCashDb.GetRows(mUuidRange, rowPtrs);
-    qDebug() << "table rows:" << rowPtrs.size();
 
     mModel.removeRows(0, mModel.rowCount());
     mTagCellDelegate.clearRowTagPtrs();
@@ -114,59 +108,75 @@ void TableHolderCash::unsetupTable()
 
 void TableHolderCash::prepareNewRow()
 {
-    if (hasInvaildCell())
+    if (mHasInvaildCell) {
+        notifyInvaildCell();
         return;
+    }
 
     QList<QStandardItem*> row;
     row << new QStandardItem(QString::fromStdString(mCashDb.GetTime()));
-    row << new QStandardItem("Out");
+    row << new QStandardItem(tr("Out"));
     row << new QStandardItem();
     row << new QStandardItem();
 
+    // if we already have one,
+    // clear it and insert new one.
     if (mHasNewRecord) {
         mModel.removeRow(0);
+        mTagCellDelegate.removeRowTag(0);
     }
     mModel.insertRow(0, row);
     mTagCellDelegate.insertRowTag(0, QStringList());
     mHasNewRecord = true;
 
-    mPtrTable->setModel(&mModel);
+    // adjust view
     mPtrTable->resizeColumnsToContents();
     mPtrTable->horizontalHeader()->setStretchLastSection(true);
     mPtrTable->horizontalHeader()->resizeSections(QHeaderView::Custom);
 
-    QModelIndex index = mModel.index(0, ColumnAmount);
+    // begin to edit
+    QModelIndex index(mModel.index(0, ColumnAmount));
     mPtrTable->setCurrentIndex(index);
     mPtrTable->edit(index);
 }
 
-bool TableHolderCash::tryToSaveRows()
+void TableHolderCash::removeRows()
 {
-    mHasNewRecord = false;
-    for (int i = 0; i < mModel.columnCount(); ++i) {
-        QStandardItem* item = mModel.item(0, i);
-        if (item->text().isEmpty()) {
+    // pick all #strictly# selected rows
+    QItemSelectionModel* selectionModel = mPtrTable->selectionModel();
+    int selectionCount = selectionModel->selectedRows().size();
+
+    if (!mHasInvaildCell) {
+        for (int i = 0; i < selectionCount; ++i) {
+            QItemSelectionModel* selectionModel = mPtrTable->selectionModel();
+            QModelIndexList indexList(selectionModel->selectedRows());
+            const int row = indexList.front().row();
+            mModel.removeRow(row);
+            mCashDb.DeleteRow(mUuidRange[row]);
+            mTagCellDelegate.removeRowTag(row);
+            mUuidRange.erase(mUuidRange.begin()+row);
+        }
+    } else {
+        if (mHasNewRecord && selectionCount == 1) {
             mModel.removeRow(0);
-            return false;
+            mTagCellDelegate.removeRowTag(0);
+            if (mHasInvaildCell) {
+                mDateCellDelegate.removeHighlightIndex(mModel.index(0, ColumnDate));
+                mAmountCellDelegate.removeHighlightIndex(mModel.index(0, ColumnAmount));
+                mHasInvaildCell = false;
+            }
+            mHasNewRecord = false;
+        } else if (selectionCount != 0) {
+            notifyInvaildCell();
         }
     }
-    return true;
-}
-
-bool TableHolderCash::rmSelectedRows()
-{
-    if (mHasNewRecord) {
-        mModel.removeRow(0);
-        mHasNewRecord = false;
-    }
-    return true;
 }
 
 void TableHolderCash::slotModelDataChanged(QStandardItem * item)
 {
     // check whether the cell is vaild
     bool cellIsVaild = true;
-    QModelIndex index = item->index();
+    QModelIndex index(item->index());
     QString cellValue(mModel.data(index).toString());
 
     switch (index.column()) {
@@ -183,8 +193,8 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     mHasInvaildCell = !cellIsVaild;
 
     if (cellIsVaild) {
-        mDateCellDelegate.removeIndex(index);
-        mAmountCellDelegate.removeIndex(index);
+        mDateCellDelegate.removeHighlightIndex(index);
+        mAmountCellDelegate.removeHighlightIndex(index);
 
         if (index.column() == ColumnAmount) {
             double value = mModel.data(index).toDouble();
@@ -196,8 +206,8 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
         else
             updateRecord(index);
     } else {
-        mDateCellDelegate.insertIndex(index);
-        mAmountCellDelegate.insertIndex(index);
+        mDateCellDelegate.insertHighlightIndex(index, QColor(255, 48, 48));
+        mAmountCellDelegate.insertHighlightIndex(index, QColor(255, 48, 48));
     }
     // resize
     mPtrTable->resizeColumnsToContents();
@@ -205,19 +215,14 @@ void TableHolderCash::slotModelDataChanged(QStandardItem * item)
     qDebug() << "row:" << item->row() << " column:" << item->column();
 }
 
-bool TableHolderCash::hasInvaildCell()
+void TableHolderCash::notifyInvaildCell()
 {
-    if (!mHasInvaildCell)
-        return false;
-
     QMessageBox msgBox(mPtrTable);
     msgBox.setWindowTitle(tr("Error"));
     msgBox.setIcon(QMessageBox::Critical);
     msgBox.setText(tr("Please correct the invaild cell first!"));
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();
-
-    return true;
 }
 
 void TableHolderCash::syncNewRecord()
@@ -227,28 +232,28 @@ void TableHolderCash::syncNewRecord()
     qDebug() << "sync!!";
 
     Row* row = new Row;
-    row->date = mModel.data(mModel.index(0, ColumnDate)).toString().toStdString();
-    row->io = mModel.data(mModel.index(0, ColumnIO)).toString().toStdString();
-    row->amount = mModel.data(mModel.index(0, ColumnAmount)).toDouble();
-    QStringList tagList = mModel.data(mModel.index(0, ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    row->date = mModel.index(0, ColumnDate).data().toString().toStdString();
+    row->io = mModel.index(0, ColumnIO).data().toString().toStdString();
+    row->amount = mModel.index(0, ColumnAmount).data().toDouble();
+    QStringList tagList = mModel.index(0, ColumnTag).data().toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
     row->tags.resize(tagList.size());
     for(size_t i = 0; i< row->tags.size(); ++i) {
         row->tags[i].name = "";
         row->tags[i].color = 0;
         qDebug() << "tag" << i << ":" << row->tags[i].name.c_str();
     }
-    row->note = mModel.data(mModel.index(0, ColumnNote)).toString().toStdString();
+    row->note = mModel.index(0, ColumnNote).data().toString().toStdString();
 
     qDebug() << "date:" << row->date.c_str();
     qDebug() << "io:" << QString::fromUtf8(row->io.c_str());
     qDebug() << "amout:" << row->amount;
     qDebug() << "note:" << QString::fromUtf8(row->note.c_str());
 
-    string uuid = QUuid::createUuid().toString().toStdString();
+    string uuid(QUuid::createUuid().toString().toStdString());
     mUuidRange.insert(mUuidRange.begin(), uuid);
-    //mRowPtrVector.insert(mRowPtrVector.begin(), row);
     mTagCellDelegate.updateRowTag(0, tagList);
     mCashDb.InsertRow(uuid, row);
+
     mHasNewRecord = false;
 }
 
@@ -260,22 +265,22 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
 
     // pick new row data in table view
     Row newRow;
-    newRow.date = mModel.data(mModel.index(row, ColumnDate)).toString().toStdString();
-    newRow.io = mModel.data(mModel.index(row, ColumnIO)).toString().toUtf8().data();
-    newRow.amount = mModel.data(mModel.index(row, ColumnAmount)).toDouble();
-    newRow.note = mModel.data(mModel.index(row, ColumnNote)).toString().toUtf8().data();
+    newRow.date = mModel.index(row, ColumnDate).data().toString().toStdString();
+    newRow.io = mModel.index(row, ColumnIO).data().toString().toUtf8().data();
+    newRow.amount = mModel.index(row, ColumnAmount).data().toDouble();
+    newRow.note = mModel.index(row, ColumnNote).data().toString().toUtf8().data();
 
     // special handle for tags
-    UuidVector tagUuids;
-    QStringList tagNames = mModel.data(mModel.index(row, ColumnTag)).toString().split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    QStringList tagNames(mModel.index(row, ColumnTag).data().toString().split(QRegExp("\\s+"), QString::SkipEmptyParts));
     newRow.tags.resize(tagNames.size());
+    UuidVector tagUuids;
     tagUuids.resize(tagNames.size());
     // NOTE: Under Windows the rand() is not as random as Unix,
     // so we split color into r/g/b, instead of an single random integer[0, 2^31).
     srand(time(NULL));
     for (size_t i = 0; i< newRow.tags.size(); ++i) {
         newRow.tags[i].name = tagNames[i].toUtf8().data();
-        newRow.tags[i].color = (rand()%(256))<<16 | (rand()%(256))<<8 | (rand()%(256));
+        newRow.tags[i].color = (rand()%256)<<16 | (rand()%256)<<8 | (rand()%256);
         tagUuids[i] = QUuid::createUuid().toString().toStdString();
         qDebug() << "tag" << i << ":" << newRow.tags[i].name.c_str();
         qDebug() << "color:" << newRow.tags[i].color;
@@ -288,10 +293,9 @@ void TableHolderCash::updateRecord(const QModelIndex &index)
     qDebug() << "tag count:" << tagNames.size();
     qDebug() << "note:" << QString::fromUtf8(newRow.note.c_str());
 
-    string uuid = mUuidRange[row];
+    string uuid(mUuidRange[row]);
     TagVector newTags;
     mCashDb.UpdateRow(uuid, newRow, tagUuids, newTags);
-    //*mRowPtrVector[row] = newRow;
     mTagCellDelegate.updateRowTag(row, tagNames);
     for (size_t i = 0; i < newTags.size(); ++i) {
         mTagCellDelegate.insertTagColorPair(

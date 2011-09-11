@@ -45,7 +45,6 @@ private slots:
     void slotBtnAddClicked();
     void slotBtnDropClicked();
     void slotBtnQueryClicked();
-    void slotBtnSaveClicked();
 
     void slotBtnEnterSqlModeClicked();
     void slotBtnQuitSqlModeClicked();
