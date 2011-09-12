@@ -92,7 +92,7 @@ void MainWindow::slotBtnAddClicked()
 
 void MainWindow::slotBtnDropClicked()
 {
-    mTableCash.removeRows();
+    mTableCash.deleteRows();
 }
 
 void MainWindow::slotBtnQueryClicked()

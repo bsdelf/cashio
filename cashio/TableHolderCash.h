@@ -34,10 +34,11 @@ public:
 
 public:
     void prepareNewRow();
-    void removeRows();
+    void deleteRows();
 
 private:
     void notifyInvaildCell();
+    bool confirmDeleteRows(const QModelIndexList& list);
     void syncNewRecord();
     void updateRecord(const QModelIndex& index);
 

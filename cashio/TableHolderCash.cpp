@@ -139,13 +139,16 @@ void TableHolderCash::prepareNewRow()
     mPtrTable->edit(index);
 }
 
-void TableHolderCash::removeRows()
+void TableHolderCash::deleteRows()
 {
     // pick all #strictly# selected rows
     QItemSelectionModel* selectionModel = mPtrTable->selectionModel();
+    QModelIndexList indexList(selectionModel->selectedRows());
     int selectionCount = selectionModel->selectedRows().size();
 
     if (!mHasInvaildCell) {
+        if (!confirmDeleteRows(indexList))
+            return;
         for (int i = 0; i < selectionCount; ++i) {
             QItemSelectionModel* selectionModel = mPtrTable->selectionModel();
             QModelIndexList indexList(selectionModel->selectedRows());
@@ -222,6 +225,25 @@ void TableHolderCash::notifyInvaildCell()
     msgBox.setText(tr("Please correct the invaild cell first!"));
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();
+}
+
+bool TableHolderCash::confirmDeleteRows(const QModelIndexList& list)
+{
+    QString text(tr("The following rows will be deleted:"));
+    text += "\n" + QString::number(list[0].row()+1);
+    for (int i = 1; i < list.size(); ++i) {
+        text += ", ";
+        if (i%10 == 0)
+            text += '\n';
+        text += QString::number(list[i].row()+1);
+    }
+
+    QMessageBox msgBox(mPtrTable);
+    msgBox.setWindowTitle(tr("Warning"));
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText(text);
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    return (msgBox.exec() == QMessageBox::Ok) ? true : false;
 }
 
 void TableHolderCash::syncNewRecord()
