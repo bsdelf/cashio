@@ -1,4 +1,5 @@
-1.support paging while present the table with large row count.
-2.better design of tags to improve performance?
-3.maybe we can use triggers instead of "if tag not exist? then insert"
-4.async load/query account table
+1.paging. async load tables.
+2.tags edit, auto unique color
+3.query support
+4.graphics
+5.config support
