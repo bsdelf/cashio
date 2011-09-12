@@ -146,6 +146,9 @@ void TableHolderCash::deleteRows()
     QModelIndexList indexList(selectionModel->selectedRows());
     int selectionCount = selectionModel->selectedRows().size();
 
+    if (selectionCount <= 0)
+        return;
+
     if (!mHasInvaildCell) {
         if (!confirmDeleteRows(indexList))
             return;
@@ -239,8 +242,8 @@ bool TableHolderCash::confirmDeleteRows(const QModelIndexList& list)
     }
 
     QMessageBox msgBox(mPtrTable);
-    msgBox.setWindowTitle(tr("Warning"));
-    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setWindowTitle(tr("Info"));
+    msgBox.setIcon(QMessageBox::Information);
     msgBox.setText(text);
     msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     return (msgBox.exec() == QMessageBox::Ok) ? true : false;
