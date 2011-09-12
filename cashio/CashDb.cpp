@@ -30,6 +30,7 @@ void CashDb::OpenDb(const string &path)
 
 void CashDb::CloseDb()
 {
+    Vacuum();
     mDbName.clear();
     sqlite3_close(mDbConn);
     mDbConn = NULL;

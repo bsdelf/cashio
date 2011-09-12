@@ -57,6 +57,11 @@ protected:
         ExecSql("PRAGMA foreign_keys=ON;");
     }
 
+    void Vacuum()
+    {
+        ExecSql("VACUUM;");
+    }
+
     void ExecSql()
     {
         ExecSql(mSqlPtr);
