@@ -5,9 +5,9 @@
         <file>res/query.png</file>
         <file>res/tags.png</file>
         <file>res/conf.png</file>
-        <file>res/db.png</file>
         <file>res/graph.png</file>
         <file>res/open.png</file>
         <file>res/yuan.png</file>
+        <file>res/account.png</file>
     </qresource>
 </RCC>
