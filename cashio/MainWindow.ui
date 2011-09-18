@@ -180,7 +180,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton">
+           <widget class="QToolButton" name="btnAccount">
             <property name="toolTip">
              <string>Edit Account</string>
             </property>

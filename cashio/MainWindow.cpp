@@ -6,7 +6,8 @@ using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mLastOpenPath(QDir::homePath())
 {
     ui->setupUi(this);
     setupSlots();   
@@ -41,6 +42,7 @@ void MainWindow::setupSlots()
     //connect(ui->btnShowDb, SIGNAL(clicked()), this, SLOT(slotBtnShowDbPressed()));
     //connect(ui->btnShowGraph, SIGNAL(clicked()), this, SLOT(slotBtnShowGraphPressed()));
 
+    connect(ui->btnOpen, SIGNAL(clicked()), this, SLOT(slotBtnOpenClicked()));
     connect(ui->btnAdd, SIGNAL(clicked()), this, SLOT(slotBtnAddClicked()));
     connect(ui->btnDrop, SIGNAL(clicked()), this, SLOT(slotBtnDropClicked()));
     connect(ui->btnQuery, SIGNAL(clicked()), this, SLOT(slotBtnQueryClicked()));
@@ -83,6 +85,16 @@ void MainWindow::slotBtnShowDbPressed()
 void MainWindow::slotBtnShowGraphPressed()
 {
 
+}
+
+void MainWindow::slotBtnOpenClicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(
+                this,
+                tr("Open Cashio Database"),
+                mLastOpenPath,
+                tr("Cashio Database (*.db)"));
+    mLastOpenPath = QFileInfo(fileName).absolutePath();
 }
 
 void MainWindow::slotBtnAddClicked()

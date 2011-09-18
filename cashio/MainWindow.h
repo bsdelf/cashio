@@ -42,6 +42,7 @@ private slots:
     void slotBtnShowDbPressed();
     void slotBtnShowGraphPressed();
 
+    void slotBtnOpenClicked();
     void slotBtnAddClicked();
     void slotBtnDropClicked();
     void slotBtnQueryClicked();
@@ -54,6 +55,8 @@ private:
     Ui::MainWindow *ui;
 
     TableHolderCash mTableCash;
+
+    QString mLastOpenPath;
 };
 
 #endif // MAINWINDOW_H
