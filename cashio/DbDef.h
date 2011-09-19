@@ -24,9 +24,23 @@ const char SQL_QUERY_TABLE_EXISTS[] =
     "select name from sqlite_master "
     "where type='table' and name='%s'";
 
-/* based on cashio_tags */
+/* table cashio_info */
+const char SQL_CREATE_TABLE_INFO[] =
+    "create table if not exists cashio_info("
+    "Key varchar(255) primary key,"
+    "Value text);";
+const char SQL_INSERT_INFO[] =
+    "insert into cashio_info values('%s', '%s');";
+const char SQL_UPDATE_INFO[] =
+    "update cashio_info set Key='%s', Value='%s' where Key='%s';";
+const char SQL_DELETE_INFO[] =
+    "delete from cashio_info where Key='%s';";
+const char SQL_QUERY_INFO_VALUE[] =
+    "select Value from cashio_info where Key='%s';";
+
+/* table cashio_tags */
 const char SQL_CREATE_TABLE_TAGS[] =
-    "create table if not exists cashio_tags ("
+    "create table if not exists cashio_tags("
     "Tag varchar(255) primary key,"
     "Color int );";
 const char SQL_INSERT_TAG[] =
@@ -40,9 +54,9 @@ const char SQL_QUERY_TAGS_HAS_TAG[] =
 const char SQL_QUERY_TAGS_ALL[] =
     "select Tag,Color from cashio_tags;";
 
-/* based on cashio_account */
+/* table cashio_account */
 const char SQL_CREATE_TABLE_ACCOUNT[] =
-    "create table if not exists cashio_account ("
+    "create table if not exists cashio_account("
     "Uuid text primary key,"
     "Date datetime,"
     "IO varchar(255) not null,"
@@ -61,9 +75,9 @@ const char SQL_QUERY_ACOUNT_ALL_DATE[] =
 const char SQL_QUERY_ACCOUNT_ROW[] =
     "select Date,IO,Amount,Note from cashio_account where Uuid='%s';";
 
-/* based on cashio_account_tag */
+/* table cashio_account_tag */
 const char SQL_CREATE_TABLE_ACCOUNT_TAG[] =
-    "create table if not exists cashio_account_tag ("
+    "create table if not exists cashio_account_tag("
     "Uuid text primary key,"
     "AccountUuid text not null,"
     "Tag varchar(255) not null,"

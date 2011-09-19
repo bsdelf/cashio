@@ -38,6 +38,8 @@ void CashDb::CloseDb()
 
 void CashDb::InitDb()
 {
+    // info table
+    ExecSql(SQL_CREATE_TABLE_INFO);
     // tags table
     ExecSql(SQL_CREATE_TABLE_TAGS);
     // account table
