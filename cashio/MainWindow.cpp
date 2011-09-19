@@ -4,11 +4,12 @@
 #include "ConfDb.h"
 using namespace std;
 
+const char CONF_DB_PATH[] = "./conf.db";
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    mLastOpenPath(QDir::homePath()),
-    mConfDb(NULL)
+    ui(new Ui::MainWindow),    
+    mConfDb(new ConfDb)
 {
     ui->setupUi(this);
     setupSlots();   
@@ -31,10 +32,33 @@ MainWindow::MainWindow(QWidget *parent) :
     keyWords << "date" << "io" << "amount" << "tags" << "note";
     c->setModel(new QStringListModel(keyWords));
     ui->editQueryCond->setCompleter(c);
+
+    if (QDir().exists(QString::fromAscii(CONF_DB_PATH))) {
+        mConfDb->OpenDb(CONF_DB_PATH, false);
+    } else {
+        mConfDb->OpenDb(CONF_DB_PATH, true);
+        QPoint point(rect().center() - QApplication::desktop()->geometry().center());
+        mConfDb->SetWindowX(point.x());
+        mConfDb->SetWindowY(point.y());
+        mConfDb->SetWindowWidth(width());
+        mConfDb->SetWindowHeight(height());
+        mConfDb->SetLastOpenPath(QDir::homePath().toUtf8().data());
+    }
+    move(mConfDb->GetWindowX(), mConfDb->GetWindowY());
+    resize(mConfDb->GetWindowWidth(), mConfDb->GetWindowHeight());
+    mLastOpenPath = QString::fromUtf8(mConfDb->GetLastOpenPath().c_str());
 }
 
 MainWindow::~MainWindow()
 {
+    mConfDb->Begin();
+    mConfDb->SetWindowX(window()->x());
+    mConfDb->SetWindowY(window()->y());
+    mConfDb->SetWindowWidth(rect().width());
+    mConfDb->SetWindowHeight(rect().height());
+    mConfDb->SetLastOpenPath(mLastOpenPath.toStdString());
+    mConfDb->Commit();
+    mConfDb->CloseDb();
     delete ui;
 }
 

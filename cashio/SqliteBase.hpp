@@ -49,6 +49,21 @@ public:
         }
     }
 
+    void Begin()
+    {
+        ExecSql("BEGIN;");
+    }
+
+    void Commit()
+    {
+        ExecSql("COMMIT;");
+    }
+
+    void Vacuum()
+    {
+        ExecSql("VACUUM;");
+    }
+
 protected:
     void SetupPragma()
     {
@@ -56,11 +71,6 @@ protected:
         ExecSql("PRAGMA synchronous=off;");
         ExecSql("PRAGMA cache_size=8000;");
         ExecSql("PRAGMA foreign_keys=ON;");
-    }
-
-    void Vacuum()
-    {
-        ExecSql("VACUUM;");
     }
 
     void ExecSql()

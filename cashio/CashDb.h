@@ -14,11 +14,11 @@ struct Tag
 
     Tag() {}
 
+    Tag(const Tag& tag):
+        name(tag.name), color(tag.color) { }
+
     Tag(const string& n, const int& c):
-        name(n),
-        color(c)
-    {
-    }
+        name(n), color(c) { }
 };
 
 struct Row
@@ -28,6 +28,11 @@ struct Row
     double amount;
     vector<Tag> tags;
     string note;
+
+    Row() {}
+
+    Row(const string& _date, const string& _io, const double _amount, const string& _note):
+        date(_date), io(_io), amount(_amount), note(_note) { }
 };
 
 typedef vector<Tag> TagVector;
@@ -45,6 +50,9 @@ public:
     void CloseDb();
     void InitDb();
     void ClearDb();
+
+    int GetVersion();
+    void UpgradeDb();
 
     void InsertTag(const Tag& tag);
     void DeleteTag(const string& tagName);

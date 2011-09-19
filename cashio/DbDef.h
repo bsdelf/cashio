@@ -14,8 +14,6 @@ const char TABLE_ACCOUNT_TAG[] = "cashio_account_tag";
 //const char TABLE_ACCOUNT_ARCHIVE_TAG[] = "cashio_account_archive_tag_%s";
 
 /* common sql command */
-const char SQL_BEGIN[] = "BEGIN;";
-const char SQL_COMMIT[] = "COMMIT;";
 const char SQL_QUERY_DATE[] =
     "select strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime');";
 const char SQL_DROP_TABLE[] =
@@ -23,6 +21,26 @@ const char SQL_DROP_TABLE[] =
 const char SQL_QUERY_TABLE_EXISTS[] =
     "select name from sqlite_master "
     "where type='table' and name='%s'";
+
+/* table conf */
+const char SQL_CREATE_TABLE_CONF[] =
+    "create table if not exists conf("
+    "Key varchar(255) primary key,"
+    "Value text);";
+const char SQL_INSERT_CONF_STR[] =
+    "insert into conf values('%s', '%s');";
+const char SQL_INSERT_CONF_INT[] =
+    "insert into conf values('%s', '%d');";
+const char SQL_UPDATE_CONF_STR[] =
+    "update conf set Key='%s', Value='%s' where Key='%s';";
+const char SQL_UPDATE_CONF_INT[] =
+    "update conf set Key='%s', Value='%d' where Key='%s';";
+const char SQL_DELETE_CONF[] =
+    "delete from conf where Key='%s';";
+const char SQL_QUERY_CONF_HAS_KEY[] =
+    "select Key from conf where Key='%s';";
+const char SQL_QUERY_CONF_VALUE[] =
+    "select Value from conf where Key='%s';";
 
 /* table cashio_info */
 const char SQL_CREATE_TABLE_INFO[] =
@@ -35,6 +53,8 @@ const char SQL_UPDATE_INFO[] =
     "update cashio_info set Key='%s', Value='%s' where Key='%s';";
 const char SQL_DELETE_INFO[] =
     "delete from cashio_info where Key='%s';";
+const char SQL_QUERY_INFO_HAS_KEY[] =
+    "select Key from cashio_info where Key='%s';";
 const char SQL_QUERY_INFO_VALUE[] =
     "select Value from cashio_info where Key='%s';";
 
