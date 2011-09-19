@@ -2,6 +2,7 @@
 #define SqliteBase_hpp
 
 #include <string>
+#include <cstdio>
 #include <iostream>
 using namespace std;
 #include <sqlite3.h>

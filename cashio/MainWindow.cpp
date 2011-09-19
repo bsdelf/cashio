@@ -1,13 +1,14 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <sqt/UiHelper.hpp>
-#include <iostream>
+#include "ConfDb.h"
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    mLastOpenPath(QDir::homePath())
+    mLastOpenPath(QDir::homePath()),
+    mConfDb(NULL)
 {
     ui->setupUi(this);
     setupSlots();   

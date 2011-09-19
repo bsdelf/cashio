@@ -1,5 +1,4 @@
 #include "CashDb.h"
-#include <cstdio>
 using namespace std;
 #include "DbDef.h"
 

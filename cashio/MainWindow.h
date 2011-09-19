@@ -4,6 +4,9 @@
 #include <QtCore>
 #include <QtGui>
 #include "TableHolderCash.h"
+#include "ConfDb.h"
+
+class ConfDb;
 
 namespace Ui {
     class MainWindow;
@@ -57,6 +60,8 @@ private:
     TableHolderCash mTableCash;
 
     QString mLastOpenPath;
+
+    ConfDb* mConfDb;
 };
 
 #endif // MAINWINDOW_H
