@@ -35,6 +35,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void loadConf();
+    void saveConf();
+
 private:
     void setupSlots();
     void switchContent(ContentIndex index);

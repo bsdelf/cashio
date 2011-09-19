@@ -33,23 +33,37 @@ MainWindow::MainWindow(QWidget *parent) :
     c->setModel(new QStringListModel(keyWords));
     ui->editQueryCond->setCompleter(c);
 
+    loadConf();
+}
+
+MainWindow::~MainWindow()
+{    
+    saveConf();
+
+    delete ui;
+}
+
+void MainWindow::loadConf()
+{
     if (QDir().exists(QString::fromAscii(CONF_DB_PATH))) {
         mConfDb->OpenDb(CONF_DB_PATH, false);
     } else {
         mConfDb->OpenDb(CONF_DB_PATH, true);
-        QPoint point(rect().center() - QApplication::desktop()->geometry().center());
+        QPoint point(QApplication::desktop()->geometry().center() - rect().center());
+        mConfDb->Begin();
         mConfDb->SetWindowX(point.x());
         mConfDb->SetWindowY(point.y());
         mConfDb->SetWindowWidth(width());
         mConfDb->SetWindowHeight(height());
         mConfDb->SetLastOpenPath(QDir::homePath().toUtf8().data());
+        mConfDb->Commit();
     }
     move(mConfDb->GetWindowX(), mConfDb->GetWindowY());
     resize(mConfDb->GetWindowWidth(), mConfDb->GetWindowHeight());
     mLastOpenPath = QString::fromUtf8(mConfDb->GetLastOpenPath().c_str());
 }
 
-MainWindow::~MainWindow()
+void MainWindow::saveConf()
 {
     mConfDb->Begin();
     mConfDb->SetWindowX(window()->x());
@@ -59,7 +73,6 @@ MainWindow::~MainWindow()
     mConfDb->SetLastOpenPath(mLastOpenPath.toStdString());
     mConfDb->Commit();
     mConfDb->CloseDb();
-    delete ui;
 }
 
 void MainWindow::setupSlots()

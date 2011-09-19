@@ -28,6 +28,7 @@ void ConfDb::OpenDb(const string& dbFile, bool needInit)
     if (needInit) {
         ExecSql(SQL_CREATE_TABLE_CONF);
 
+        Begin();
         FORMAT_SQL(SQL_INSERT_CONF_INT, KEY_WND_X, 0);
         ExecSql();
         FORMAT_SQL(SQL_INSERT_CONF_INT, KEY_WND_Y, 0);
@@ -38,6 +39,7 @@ void ConfDb::OpenDb(const string& dbFile, bool needInit)
         ExecSql();
         FORMAT_SQL(SQL_INSERT_CONF_STR, KEY_LAST_OPEN_PATH, "");
         ExecSql();
+        Commit();
     }
 }
 
