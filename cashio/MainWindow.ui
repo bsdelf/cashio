@@ -145,7 +145,7 @@
          <item>
           <widget class="QToolButton" name="btnTag">
            <property name="toolTip">
-            <string>Edit All Tags</string>
+            <string>Edit Tags</string>
            </property>
            <property name="statusTip">
             <string/>
@@ -169,9 +169,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnGraph">
+          <widget class="QToolButton" name="btnChart">
            <property name="toolTip">
-            <string>Show/Hide Graph</string>
+            <string>Draw Chart</string>
            </property>
            <property name="statusTip">
             <string/>
@@ -181,7 +181,7 @@
            </property>
            <property name="icon">
             <iconset resource="resource.qrc">
-             <normaloff>:/icon/res/graph.png</normaloff>:/icon/res/graph.png</iconset>
+             <normaloff>:/icon/res/chart.png</normaloff>:/icon/res/chart.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -195,7 +195,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="btnConf">
+          <widget class="QToolButton" name="btnConfig">
            <property name="toolTip">
             <string>Preference</string>
            </property>
@@ -207,7 +207,7 @@
            </property>
            <property name="icon">
             <iconset resource="resource.qrc">
-             <normaloff>:/icon/res/conf.png</normaloff>:/icon/res/conf.png</iconset>
+             <normaloff>:/icon/res/config.png</normaloff>:/icon/res/config.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -216,7 +216,7 @@
             </size>
            </property>
            <property name="checkable">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="autoExclusive">
             <bool>false</bool>
@@ -245,7 +245,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>3</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="toolbarExtAccount">
          <property name="sizePolicy">
@@ -556,7 +556,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QStackedWidget" name="stackedWidgetTool">
+     <widget class="QStackedWidget" name="stackedWidgetMoreTool">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -573,9 +573,9 @@
        <number>1</number>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
-      <widget class="QWidget" name="pageAccountQuery">
+      <widget class="QWidget" name="moreToolAccount">
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <property name="margin">
          <number>2</number>
@@ -613,7 +613,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageTagQuery">
+      <widget class="QWidget" name="moreToolTag">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -698,6 +698,31 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="moreToolGraph">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="margin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="graphTabColumnChart">
+           <attribute name="title">
+            <string>Column Chart</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="graphTabPieChart">
+           <attribute name="title">
+            <string>Pie Chart</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="moreToolEmpty"/>
      </widget>
     </item>
     <item>

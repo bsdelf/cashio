@@ -26,10 +26,10 @@ void PageAccount::init(const Ui::MainWindow *_ui)
 void PageAccount::active()
 {
     sqt::switchStackPage(ui->stackedWidgetToolbarExt, 0);
-    sqt::switchStackPage(ui->stackedWidgetTool, 0);
+    sqt::switchStackPage(ui->stackedWidgetMoreTool, 0);
     sqt::switchStackPage(ui->stackedWidgetContent, 0);
 
-    ui->stackedWidgetTool->setVisible(mShouldToolShow);
+    ui->stackedWidgetMoreTool->setVisible(mShouldToolShow);
 }
 
 void PageAccount::saveState()
@@ -49,10 +49,10 @@ void PageAccount::slotBtnDeleteClicked()
 
 void PageAccount::slotBtnQueryClicked()
 {
-    mShouldToolShow = ui->stackedWidgetTool->isHidden();
+    mShouldToolShow = ui->stackedWidgetMoreTool->isHidden();
 
     if (mShouldToolShow) {
         ui->editAccountQuery->setFocus();
     }
-    ui->stackedWidgetTool->setShown(mShouldToolShow);
+    ui->stackedWidgetMoreTool->setShown(mShouldToolShow);
 }

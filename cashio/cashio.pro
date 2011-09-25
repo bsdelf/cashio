@@ -17,8 +17,8 @@ SOURCES += main.cpp\
     ConfDb.cpp \
     PageAccount.cpp \
     PageTag.cpp \
-    PageGraph.cpp \
-    PageConfig.cpp
+    PageConfig.cpp \
+    PageChart.cpp
 
 HEADERS  += MainWindow.h \
     DbDef.h \
@@ -35,8 +35,8 @@ HEADERS  += MainWindow.h \
     PageAccount.h \
     PageInf.h \
     PageTag.h \
-    PageGraph.h \
-    PageConfig.h
+    PageConfig.h \
+    PageChart.h
 
 FORMS    += MainWindow.ui
 

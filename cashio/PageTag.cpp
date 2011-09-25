@@ -25,10 +25,10 @@ void PageTag::init(const Ui::MainWindow *_ui)
 void PageTag::active()
 {
     sqt::switchStackPage(ui->stackedWidgetToolbarExt, 1);
-    sqt::switchStackPage(ui->stackedWidgetTool, 1);
+    sqt::switchStackPage(ui->stackedWidgetMoreTool, 1);
     sqt::switchStackPage(ui->stackedWidgetContent, 1);
 
-    ui->stackedWidgetTool->setVisible(mShouldToolShow);
+    ui->stackedWidgetMoreTool->setVisible(mShouldToolShow);
 }
 
 void PageTag::saveState()
@@ -48,12 +48,12 @@ void PageTag::slotBtnDeleteClicked()
 
 void PageTag::slotBtnQueryClicked()
 {
-    mShouldToolShow = ui->stackedWidgetTool->isHidden();
+    mShouldToolShow = ui->stackedWidgetMoreTool->isHidden();
 
     if (mShouldToolShow) {
         ui->editAccountQuery->setFocus();
     }
-    ui->stackedWidgetTool->setShown(mShouldToolShow);
+    ui->stackedWidgetMoreTool->setShown(mShouldToolShow);
 }
 
 void PageTag::slotBtnClearClicked()

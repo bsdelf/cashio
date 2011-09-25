@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mPageAccount.init(ui);
     mPageTag.init(ui);
-    mPageGraph.init(ui);
+    mPageChart.init(ui);
     mPageConfig.init(ui);
 
     setupSlots();   
@@ -84,13 +84,11 @@ void MainWindow::setupSlots()
     connect(ui->btnOpen, SIGNAL(clicked()), this, SLOT(slotBtnOpenClicked()));
     connect(ui->btnCreate, SIGNAL(clicked()), this, SLOT(slotBtnCreateClicked()));
 
-    // account page
+    // tools
     connect(ui->btnAccount, SIGNAL(clicked()), this, SLOT(slotBtnAccountClicked()));
-
-    // tag page
     connect(ui->btnTag, SIGNAL(clicked()), this, SLOT(slotBtnTagClicked()));
-    // graph page
-    connect(ui->btnGraph, SIGNAL(clicked()), this, SLOT(slotBtnGraphClicked()));
+    connect(ui->btnChart, SIGNAL(clicked()), this, SLOT(slotBtnChartClicked()));
+    connect(ui->btnConfig, SIGNAL(clicked()), this, SLOT(slotBtnConfigClicked()));
 }
 
 void MainWindow::slotBtnOpenClicked()
@@ -118,9 +116,9 @@ void MainWindow::slotBtnTagClicked()
     mPageTag.active();
 }
 
-void MainWindow::slotBtnGraphClicked()
+void MainWindow::slotBtnChartClicked()
 {
-    mPageGraph.active();
+    mPageChart.active();
 }
 
 void MainWindow::slotBtnConfigClicked()

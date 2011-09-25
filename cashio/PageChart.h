@@ -1,16 +1,16 @@
-#ifndef PAGECONFIG_H
-#define PAGECONFIG_H
+#ifndef PAGECHART_H
+#define PAGECHART_H
 
 #include <QtGui>
 #include "PageInf.h"
 
-class PageConfig: public QObject, public PageInf
+class PageChart: public QObject, public PageInf
 {
     Q_OBJECT
 
 public:
-    PageConfig();
-    virtual ~PageConfig();
+    PageChart();
+    virtual ~PageChart();
 
     virtual void init(const Ui::MainWindow *_ui);
     virtual void active();
@@ -18,7 +18,6 @@ public:
 
 private:
     const Ui::MainWindow* ui;
-
 };
 
-#endif // PAGECONFIG_H
+#endif // PAGECHART_H

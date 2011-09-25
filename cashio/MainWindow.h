@@ -5,7 +5,7 @@
 #include <QtGui>
 #include "PageAccount.h"
 #include "PageTag.h"
-#include "PageGraph.h"
+#include "PageChart.h"
 #include "PageConfig.h"
 
 #include "ConfDb.h"
@@ -36,7 +36,7 @@ private slots:
 
     void slotBtnAccountClicked();    
     void slotBtnTagClicked();
-    void slotBtnGraphClicked();
+    void slotBtnChartClicked();
     void slotBtnConfigClicked();
 
 private:
@@ -48,7 +48,7 @@ private:
 
     PageAccount mPageAccount;
     PageTag mPageTag;
-    PageGraph mPageGraph;
+    PageChart mPageChart;
     PageConfig mPageConfig;
 
 };
