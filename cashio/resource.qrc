@@ -9,5 +9,7 @@
         <file>res/open.png</file>
         <file>res/yuan.png</file>
         <file>res/account.png</file>
+        <file>res/clear.png</file>
+        <file>res/new.png</file>
     </qresource>
 </RCC>
