@@ -418,6 +418,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="btnQueryClear">
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnEnterSqlMode">
           <property name="text">
            <string>Enter SQL Mode</string>
