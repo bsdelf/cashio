@@ -4,6 +4,10 @@
 #include <QtCore>
 #include <QtGui>
 #include "PageAccount.h"
+#include "PageTag.h"
+#include "PageGraph.h"
+#include "PageConfig.h"
+
 #include "ConfDb.h"
 
 class ConfDb;
@@ -11,21 +15,6 @@ class ConfDb;
 namespace Ui {
     class MainWindow;
 }
-
-enum ContentIndex {
-    ContentDb = 0,
-    ContentGraph,
-};
-
-enum ToolBarIndex {
-    ToolBarDatabase = 0,
-    ToolBarGraphics,
-};
-
-enum ToolExtIndex {
-    ToolExtQueryCond = 0,
-    ToolExtQuerySql,
-};
 
 class MainWindow: public QMainWindow
 {
@@ -46,13 +35,7 @@ private slots:
     void slotBtnCreateClicked();
 
     void slotBtnAccountClicked();    
-
     void slotBtnTagClicked();
-    void slotBtnTagInsertClicked();
-    void slotBtnTagDeleteClicked();
-    void slotBtnTagQueryClicked();
-    void slotBtnTagClearClicked();
-
     void slotBtnGraphClicked();
     void slotBtnConfigClicked();
 
@@ -64,6 +47,10 @@ private:
     ConfDb* mConfDb;
 
     PageAccount mPageAccount;
+    PageTag mPageTag;
+    PageGraph mPageGraph;
+    PageConfig mPageConfig;
+
 };
 
 #endif // MAINWINDOW_H

@@ -6,7 +6,7 @@
 
 namespace sqt {
 
-static inline void switchStackPage(QStackedWidget* stack, int index)
+static void switchStackPage(QStackedWidget* stack, int index)
 {
     const int pageCount = stack->count();
     if (pageCount != 0)

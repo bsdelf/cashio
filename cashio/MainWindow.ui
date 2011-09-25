@@ -703,7 +703,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidgetContent">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="contentAccount">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -759,8 +759,39 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="contentGraph"/>
-      <widget class="QWidget" name="contentConfig"/>
+      <widget class="QWidget" name="contentGraph">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="margin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QGraphicsView" name="graphicsView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="contentConfig">
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <property name="margin">
+         <number>2</number>
+        </property>
+        <item>
+         <widget class="QListView" name="listOption">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QStackedWidget" name="stackedWidget">
+          <widget class="QWidget" name="page"/>
+          <widget class="QWidget" name="page_2"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

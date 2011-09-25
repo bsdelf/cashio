@@ -1,18 +1,16 @@
-#ifndef PAGEACCOUNT_H
-#define PAGEACCOUNT_H
+#ifndef PAGETAG_H
+#define PAGETAG_H
 
 #include <QtGui>
 #include "PageInf.h"
 
-class TableHolderCash;
-
-class PageAccount: public QObject, public PageInf
+class PageTag: public QObject, public PageInf
 {
     Q_OBJECT
 
 public:
-    PageAccount();
-    virtual ~PageAccount();
+    PageTag();
+    virtual ~PageTag();
 
     virtual void init(const Ui::MainWindow *_ui);
     virtual void active();
@@ -22,13 +20,11 @@ private slots:
     void slotBtnInsertClicked();
     void slotBtnDeleteClicked();
     void slotBtnQueryClicked();
+    void slotBtnClearClicked();
 
 private:
     const Ui::MainWindow* ui;
-
-    TableHolderCash* mTableCash;
-
     bool mShouldToolShow;
 };
 
-#endif // PAGEACCOUNT_H
+#endif // PAGETAG_H

@@ -15,7 +15,10 @@ SOURCES += main.cpp\
     TableHolderTags.cpp \
     TableHolderCash.cpp \
     ConfDb.cpp \
-    PageAccount.cpp
+    PageAccount.cpp \
+    PageTag.cpp \
+    PageGraph.cpp \
+    PageConfig.cpp
 
 HEADERS  += MainWindow.h \
     DbDef.h \
@@ -30,7 +33,10 @@ HEADERS  += MainWindow.h \
     SqliteBase.hpp \
     ConfDb.h \
     PageAccount.h \
-    PageInf.h
+    PageInf.h \
+    PageTag.h \
+    PageGraph.h \
+    PageConfig.h
 
 FORMS    += MainWindow.ui
 

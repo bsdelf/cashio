@@ -12,12 +12,13 @@ MainWindow::MainWindow(QWidget *parent) :
     mConfDb(new ConfDb)
 {
     ui->setupUi(this);
+
     mPageAccount.init(ui);
+    mPageTag.init(ui);
+    mPageGraph.init(ui);
+    mPageConfig.init(ui);
 
     setupSlots();   
-
-    //ui->stackedWidgetTool->hide();
-    //sqt::switchStackPage(ui->stackedWidgetTool, ToolExtQueryCond);
 
     QMenu* menu = new QMenu;
     menu->addAction("a");
@@ -107,46 +108,22 @@ void MainWindow::slotBtnCreateClicked()
 
 }
 
-// for account page
 void MainWindow::slotBtnAccountClicked()
 {
     mPageAccount.active();
 }
 
-// for tag page
 void MainWindow::slotBtnTagClicked()
 {
-
+    mPageTag.active();
 }
 
-void MainWindow::slotBtnTagInsertClicked()
-{
-
-}
-
-void MainWindow::slotBtnTagDeleteClicked()
-{
-
-}
-
-void MainWindow::slotBtnTagQueryClicked()
-{
-
-}
-
-void MainWindow::slotBtnTagClearClicked()
-{
-
-}
-
-// for graph page
 void MainWindow::slotBtnGraphClicked()
 {
-
+    mPageGraph.active();
 }
 
-// for config page
 void MainWindow::slotBtnConfigClicked()
 {
-
+    mPageConfig.active();
 }
