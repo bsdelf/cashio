@@ -16,6 +16,9 @@ public:
     virtual void active();
     virtual void saveState();
 
+private slots:
+    void drawSomeThing();
+
 private:
     const Ui::MainWindow* ui;
 };

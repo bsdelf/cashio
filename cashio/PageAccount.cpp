@@ -16,7 +16,7 @@ void PageAccount::init(const Ui::MainWindow *_ui)
 {
     ui = _ui;
 
-    mTableCash = new TableHolderCash(ui->tableView);
+    mTableCash = new TableHolderCash(ui->tableViewAccount);
 
     connect(ui->btnAccountInsert, SIGNAL(clicked()), this, SLOT(slotBtnInsertClicked()));
     connect(ui->btnAccountDelete, SIGNAL(clicked()), this, SLOT(slotBtnDeleteClicked()));

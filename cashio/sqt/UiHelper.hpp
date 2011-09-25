@@ -6,6 +6,14 @@
 
 namespace sqt {
 
+static void adjustAllStackPages(QStackedWidget* stack, QSizePolicy plicy)
+{
+    for (int i = 0; i < stack->count(); ++i)
+    {
+        stack->widget(i)->setSizePolicy(plicy);
+    }
+}
+
 static void switchStackPage(QStackedWidget* stack, int index)
 {
     const int pageCount = stack->count();
@@ -22,10 +30,7 @@ static void switchStackPage(QStackedWidget* stack, int index)
         else
         {
             // minimal all page
-            for (int i = 0; i < pageCount; ++i)
-            {
-                stack->widget(i)->setSizePolicy(policyMin);
-            }
+            adjustAllStackPages(stack, policyMin);
         }
         // show and maximal new page
         stack->setCurrentIndex(index);

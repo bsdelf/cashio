@@ -24,6 +24,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private:
+    virtual void showEvent(QShowEvent * event);
+    virtual void closeEvent(QCloseEvent * event);
+
     void loadConf();
     void saveConf();
 

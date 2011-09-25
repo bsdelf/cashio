@@ -35,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->editQueryCond->setCompleter(c);
 
     loadConf();
-
-    mPageAccount.active();
 }
 
 MainWindow::~MainWindow()
@@ -44,6 +42,22 @@ MainWindow::~MainWindow()
     saveConf();
 
     delete ui;
+}
+
+void MainWindow::showEvent(QShowEvent *)
+{
+    QSizePolicy policyMin(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    sqt::adjustAllStackPages(ui->stackedWidgetToolbarExt, policyMin);
+    sqt::adjustAllStackPages(ui->stackedWidgetMoreTool, policyMin);
+    sqt::adjustAllStackPages(ui->stackedWidgetContent, policyMin);
+
+    //mPageAccount.active();
+    mPageChart.active();
+}
+
+void MainWindow::closeEvent(QCloseEvent *)
+{
+
 }
 
 void MainWindow::loadConf()
