@@ -96,7 +96,7 @@ void MainWindow::switchContent(ContentIndex index)
 
 void MainWindow::switchToolBar(ToolBarIndex pageIndex)
 {
-    ui->widgetToolBar->setCurrentIndex(pageIndex);
+    ui->widgetToolBarExt->setCurrentIndex(pageIndex);
     if (pageIndex != ToolBarDatabase)
     {
         ui->widgetToolExt->setShown(false);
