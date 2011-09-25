@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QtGui>
-#include "TableHolderCash.h"
+#include "PageAccount.h"
 #include "ConfDb.h"
 
 class ConfDb;
@@ -40,31 +40,30 @@ public:
 
 private:
     void setupSlots();
-    void switchContent(ContentIndex index);
-    void switchToolBar(ToolBarIndex index);
-    void focusCurrentEditQuery();
 
 private slots:
-    void slotBtnShowDbPressed();
-    void slotBtnShowGraphPressed();
-
     void slotBtnOpenClicked();
-    void slotBtnAddClicked();
-    void slotBtnDropClicked();
-    void slotBtnQueryClicked();
+    void slotBtnCreateClicked();
 
-    void slotBtnEnterSqlModeClicked();
-    void slotBtnQuitSqlModeClicked();
-    void slotCbxPageIndexChanged(int index);
+    void slotBtnAccountClicked();    
+
+    void slotBtnTagClicked();
+    void slotBtnTagInsertClicked();
+    void slotBtnTagDeleteClicked();
+    void slotBtnTagQueryClicked();
+    void slotBtnTagClearClicked();
+
+    void slotBtnGraphClicked();
+    void slotBtnConfigClicked();
 
 private:
     Ui::MainWindow *ui;
 
-    TableHolderCash mTableCash;
-
     QString mLastOpenPath;
 
     ConfDb* mConfDb;
+
+    PageAccount mPageAccount;
 };
 
 #endif // MAINWINDOW_H

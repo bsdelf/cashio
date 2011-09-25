@@ -14,7 +14,8 @@ SOURCES += main.cpp\
     CashDb.cpp \
     TableHolderTags.cpp \
     TableHolderCash.cpp \
-    ConfDb.cpp
+    ConfDb.cpp \
+    PageAccount.cpp
 
 HEADERS  += MainWindow.h \
     DbDef.h \
@@ -27,7 +28,9 @@ HEADERS  += MainWindow.h \
     QBaseCellDelegate.hpp \
     QTagCellDelegate.hpp \
     SqliteBase.hpp \
-    ConfDb.h
+    ConfDb.h \
+    PageAccount.h \
+    PageInf.h
 
 FORMS    += MainWindow.ui
 

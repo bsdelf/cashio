@@ -11,5 +11,6 @@
         <file>res/account.png</file>
         <file>res/clear.png</file>
         <file>res/new.png</file>
+        <file>res/save.png</file>
     </qresource>
 </RCC>

@@ -12,12 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
     mConfDb(new ConfDb)
 {
     ui->setupUi(this);
+    mPageAccount.init(ui);
+
     setupSlots();   
 
-    slotBtnShowDbPressed();
-    ui->widgetToolExt->hide();
-    sqt::switchStackPage(ui->widgetToolExt, ToolExtQueryCond);
-    mTableCash.setupTable(ui->tableView);
+    //ui->stackedWidgetTool->hide();
+    //sqt::switchStackPage(ui->stackedWidgetTool, ToolExtQueryCond);
 
     QMenu* menu = new QMenu;
     menu->addAction("a");
@@ -31,9 +31,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList keyWords;
     keyWords << "date" << "io" << "amount" << "tags" << "note";
     c->setModel(new QStringListModel(keyWords));
-    ui->editQueryCond->setCompleter(c);
+    //ui->editQueryCond->setCompleter(c);
 
     loadConf();
+
+    mPageAccount.active();
 }
 
 MainWindow::~MainWindow()
@@ -77,52 +79,17 @@ void MainWindow::saveConf()
 
 void MainWindow::setupSlots()
 {
-    //connect(ui->btnShowDb, SIGNAL(clicked()), this, SLOT(slotBtnShowDbPressed()));
-    //connect(ui->btnShowGraph, SIGNAL(clicked()), this, SLOT(slotBtnShowGraphPressed()));
-
+    // global
     connect(ui->btnOpen, SIGNAL(clicked()), this, SLOT(slotBtnOpenClicked()));
-    connect(ui->btnAdd, SIGNAL(clicked()), this, SLOT(slotBtnAddClicked()));
-    connect(ui->btnDrop, SIGNAL(clicked()), this, SLOT(slotBtnDropClicked()));
-    connect(ui->btnQuery, SIGNAL(clicked()), this, SLOT(slotBtnQueryClicked()));
+    connect(ui->btnCreate, SIGNAL(clicked()), this, SLOT(slotBtnCreateClicked()));
 
-    connect(ui->btnEnterSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnEnterSqlModeClicked()));
-    connect(ui->btnQuitSqlMode, SIGNAL(clicked()), this, SLOT(slotBtnQuitSqlModeClicked()));
-}
+    // account page
+    connect(ui->btnAccount, SIGNAL(clicked()), this, SLOT(slotBtnAccountClicked()));
 
-void MainWindow::switchContent(ContentIndex index)
-{
-
-}
-
-void MainWindow::switchToolBar(ToolBarIndex pageIndex)
-{
-    ui->widgetToolBarExt->setCurrentIndex(pageIndex);
-    if (pageIndex != ToolBarDatabase)
-    {
-        ui->widgetToolExt->setShown(false);
-    }
-}
-
-void MainWindow::focusCurrentEditQuery()
-{
-    switch (ui->widgetToolExt->currentIndex()) {
-    case ToolExtQueryCond:
-        ui->editQueryCond->setFocus();
-        break;
-
-    case ToolExtQuerySql:
-        ui->editQuerySql->setFocus();
-        break;
-    }
-}
-
-void MainWindow::slotBtnShowDbPressed()
-{
-}
-
-void MainWindow::slotBtnShowGraphPressed()
-{
-
+    // tag page
+    connect(ui->btnTag, SIGNAL(clicked()), this, SLOT(slotBtnTagClicked()));
+    // graph page
+    connect(ui->btnGraph, SIGNAL(clicked()), this, SLOT(slotBtnGraphClicked()));
 }
 
 void MainWindow::slotBtnOpenClicked()
@@ -135,40 +102,51 @@ void MainWindow::slotBtnOpenClicked()
     mLastOpenPath = QFileInfo(fileName).absolutePath();
 }
 
-void MainWindow::slotBtnAddClicked()
+void MainWindow::slotBtnCreateClicked()
 {
-    mTableCash.prepareNewRow();
+
 }
 
-void MainWindow::slotBtnDropClicked()
+// for account page
+void MainWindow::slotBtnAccountClicked()
 {
-    mTableCash.deleteRows();
+    mPageAccount.active();
 }
 
-void MainWindow::slotBtnQueryClicked()
+// for tag page
+void MainWindow::slotBtnTagClicked()
 {
-    bool shouldShow = ui->widgetToolExt->isHidden();
 
-    if (shouldShow) {
-        focusCurrentEditQuery();
-    }
-    ui->widgetToolExt->setShown(shouldShow);
 }
 
-void MainWindow::slotCbxPageIndexChanged(int index)
+void MainWindow::slotBtnTagInsertClicked()
 {
-    ToolBarIndex toolbarIndex = (ToolBarIndex)index;
-    switchToolBar(toolbarIndex);
+
 }
 
-void MainWindow::slotBtnEnterSqlModeClicked()
+void MainWindow::slotBtnTagDeleteClicked()
 {
-    sqt::switchStackPage(ui->widgetToolExt, ToolExtQuerySql);
-    focusCurrentEditQuery();
+
 }
 
-void MainWindow::slotBtnQuitSqlModeClicked()
+void MainWindow::slotBtnTagQueryClicked()
 {
-    sqt::switchStackPage(ui->widgetToolExt, ToolExtQueryCond);
-    focusCurrentEditQuery();
+
+}
+
+void MainWindow::slotBtnTagClearClicked()
+{
+
+}
+
+// for graph page
+void MainWindow::slotBtnGraphClicked()
+{
+
+}
+
+// for config page
+void MainWindow::slotBtnConfigClicked()
+{
+
 }

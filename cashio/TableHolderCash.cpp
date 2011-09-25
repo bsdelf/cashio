@@ -1,8 +1,7 @@
 #include "TableHolderCash.h"
 #include <ctime>
 
-TableHolderCash::TableHolderCash(QObject *parent) :
-    QObject(parent),
+TableHolderCash::TableHolderCash(QTableView* table) :
     mHasNewRecord(false),
     mHasInvaildCell(false)
 {
@@ -17,6 +16,8 @@ TableHolderCash::TableHolderCash(QObject *parent) :
     mAmountCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
 
     mNoteCellDelegate.setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+
+    setupTable(table);
 }
 
 TableHolderCash::~TableHolderCash()
@@ -97,11 +98,6 @@ void TableHolderCash::setupTable(QTableView *table)
 
     connect(&mModel, SIGNAL(itemChanged(QStandardItem*)),
             this, SLOT(slotModelDataChanged(QStandardItem*)));
-
-}
-
-void TableHolderCash::unsetupTable()
-{
 
 }
 

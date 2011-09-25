@@ -6,9 +6,10 @@
 
 namespace sqt {
 
-void switchStackPage(QStackedWidget* stack, int index)
+static inline void switchStackPage(QStackedWidget* stack, int index)
 {
-    if (stack->count() != 0)
+    const int pageCount = stack->count();
+    if (pageCount != 0)
     {
         QSizePolicy policyMin(QSizePolicy::Ignored, QSizePolicy::Ignored);
         QSizePolicy policyMax(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -21,7 +22,7 @@ void switchStackPage(QStackedWidget* stack, int index)
         else
         {
             // minimal all page
-            for (int i = 0; i < stack->count(); ++i)
+            for (int i = 0; i < pageCount; ++i)
             {
                 stack->widget(i)->setSizePolicy(policyMin);
             }

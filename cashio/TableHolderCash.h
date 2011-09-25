@@ -22,21 +22,19 @@ class TableHolderCash : public QObject
     Q_OBJECT
 
 public:
-    explicit TableHolderCash(QObject *parent = 0);
+    explicit TableHolderCash(QTableView* table);
     ~TableHolderCash();
 
 public:
     void openDb(const QString& path);
     void closeDb();
 
-    void setupTable(QTableView* table);
-    void unsetupTable();
-
 public:
     void prepareNewRow();
     void deleteRows();
 
 private:
+    void setupTable(QTableView* table);
     void notifyInvaildCell();
     bool confirmDeleteRows(const QModelIndexList& list);
     void syncNewRecord();
