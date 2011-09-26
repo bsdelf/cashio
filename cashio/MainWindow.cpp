@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <sqt/UiHelper.hpp>
+using namespace sqt;
 #include "ConfDb.h"
 using namespace std;
 
@@ -47,9 +48,9 @@ MainWindow::~MainWindow()
 void MainWindow::showEvent(QShowEvent *)
 {
     QSizePolicy policyMin(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    sqt::adjustAllStackPages(ui->stackedWidgetToolbarExt, policyMin);
-    sqt::adjustAllStackPages(ui->stackedWidgetMoreTool, policyMin);
-    sqt::adjustAllStackPages(ui->stackedWidgetContent, policyMin);
+    UiHelper::adjustAllStackPages(ui->stackedWidgetToolbarExt, policyMin);
+    UiHelper::adjustAllStackPages(ui->stackedWidgetMoreTool, policyMin);
+    UiHelper::adjustAllStackPages(ui->stackedWidgetContent, policyMin);
 
     //mPageAccount.active();
     mPageChart.active();

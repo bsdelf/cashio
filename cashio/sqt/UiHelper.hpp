@@ -6,38 +6,42 @@
 
 namespace sqt {
 
-static void adjustAllStackPages(QStackedWidget* stack, QSizePolicy plicy)
+class UiHelper
 {
-    for (int i = 0; i < stack->count(); ++i)
+public:
+    static void adjustAllStackPages(QStackedWidget* stack, QSizePolicy plicy)
     {
-        stack->widget(i)->setSizePolicy(plicy);
+        for (int i = 0; i < stack->count(); ++i)
+        {
+            stack->widget(i)->setSizePolicy(plicy);
+        }
     }
-}
 
-static void switchStackPage(QStackedWidget* stack, int index)
-{
-    const int pageCount = stack->count();
-    if (pageCount != 0)
+    static void switchStackPage(QStackedWidget* stack, int index)
     {
-        QSizePolicy policyMin(QSizePolicy::Ignored, QSizePolicy::Ignored);
-        QSizePolicy policyMax(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        const int pageCount = stack->count();
+        if (pageCount != 0)
+        {
+            QSizePolicy policyMin(QSizePolicy::Ignored, QSizePolicy::Ignored);
+            QSizePolicy policyMax(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        // minimal previous page
-        if (stack->currentIndex() != index)
-        {
-            stack->currentWidget()->setSizePolicy(policyMin);
+            // minimal previous page
+            if (stack->currentIndex() != index)
+            {
+                stack->currentWidget()->setSizePolicy(policyMin);
+            }
+            else
+            {
+                // minimal all page
+                adjustAllStackPages(stack, policyMin);
+            }
+            // show and maximal new page
+            stack->setCurrentIndex(index);
+            stack->currentWidget()->setSizePolicy(policyMax);
+            stack->adjustSize();
         }
-        else
-        {
-            // minimal all page
-            adjustAllStackPages(stack, policyMin);
-        }
-        // show and maximal new page
-        stack->setCurrentIndex(index);
-        stack->currentWidget()->setSizePolicy(policyMax);
-        stack->adjustSize();
     }
-}
+};
 
 }
 

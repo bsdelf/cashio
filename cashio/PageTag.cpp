@@ -1,6 +1,7 @@
 #include "PageTag.h"
 #include "ui_MainWindow.h"
 #include "sqt/UiHelper.hpp"
+using namespace sqt;
 
 PageTag::PageTag():
     mShouldToolShow(false)
@@ -24,9 +25,9 @@ void PageTag::init(const Ui::MainWindow *_ui)
 
 void PageTag::active()
 {
-    sqt::switchStackPage(ui->stackedWidgetToolbarExt, 1);
-    sqt::switchStackPage(ui->stackedWidgetMoreTool, 1);
-    sqt::switchStackPage(ui->stackedWidgetContent, 1);
+    UiHelper::switchStackPage(ui->stackedWidgetToolbarExt, 1);
+    UiHelper::switchStackPage(ui->stackedWidgetMoreTool, 1);
+    UiHelper::switchStackPage(ui->stackedWidgetContent, 1);
 
     ui->stackedWidgetMoreTool->setVisible(mShouldToolShow);
 }

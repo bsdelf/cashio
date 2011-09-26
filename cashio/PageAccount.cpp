@@ -2,6 +2,7 @@
 #include "TableHolderCash.h"
 #include "ui_MainWindow.h"
 #include "sqt/UiHelper.hpp"
+using namespace sqt;
 
 PageAccount::PageAccount():
     mShouldToolShow(false)
@@ -25,9 +26,9 @@ void PageAccount::init(const Ui::MainWindow *_ui)
 
 void PageAccount::active()
 {
-    sqt::switchStackPage(ui->stackedWidgetToolbarExt, 0);
-    sqt::switchStackPage(ui->stackedWidgetMoreTool, 0);
-    sqt::switchStackPage(ui->stackedWidgetContent, 0);
+    UiHelper::switchStackPage(ui->stackedWidgetToolbarExt, 0);
+    UiHelper::switchStackPage(ui->stackedWidgetMoreTool, 0);
+    UiHelper::switchStackPage(ui->stackedWidgetContent, 0);
 
     ui->stackedWidgetMoreTool->setVisible(mShouldToolShow);
 }

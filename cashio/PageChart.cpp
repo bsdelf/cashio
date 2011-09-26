@@ -1,6 +1,7 @@
 #include "PageChart.h"
 #include "ui_MainWindow.h"
 #include "sqt/UiHelper.hpp"
+using namespace sqt;
 
 PageChart::PageChart()
 {
@@ -20,9 +21,9 @@ void PageChart::init(const Ui::MainWindow *_ui)
 
 void PageChart::active()
 {
-    sqt::switchStackPage(ui->stackedWidgetToolbarExt, 2);
-    sqt::switchStackPage(ui->stackedWidgetMoreTool, 2);
-    sqt::switchStackPage(ui->stackedWidgetContent, 2);
+    UiHelper::switchStackPage(ui->stackedWidgetToolbarExt, 2);
+    UiHelper::switchStackPage(ui->stackedWidgetMoreTool, 2);
+    UiHelper::switchStackPage(ui->stackedWidgetContent, 2);
 
     ui->stackedWidgetMoreTool->setVisible(true);
 
@@ -60,7 +61,7 @@ void PageChart::drawSomeThing()
 
     QFont font(ui->graphicsView->font());
     //font.setStyleStrategy(QFont::PreferQuality);
-    path.addText(10, 10, font, "ÄãºÃfine");
+    path.addText(10, 10, font, "ä½ å¥½fine");
     scene->addPath(path);
 
     ui->graphicsView->setScene(scene);
